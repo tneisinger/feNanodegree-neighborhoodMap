@@ -2,30 +2,6 @@
 
 var MAP_CENTER = {lat:34.03, lng: -118.394}
 
-function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
-    center: MAP_CENTER,
-    zoom: 15,
-    disableDefaultUI: true
-  });
-  var places = [];
-  placesData.forEach(function(placeData) {
-    var place = new Place(placeData);
-    place.marker = new google.maps.Marker({
-      position: placeData.location,
-      title: placeData.name,
-      map: map,
-      animation: google.maps.Animation.DROP,
-      //infowindow: new google.maps.InfoWindow({ content: makeInfoWindowContent(place) })
-      infowindow: new InfoBubble({ map: map, content: makeInfoWindowContent(place) })
-    });
-    place.marker.addListener('click', function() { app.vm.selectPlace(place) });
-    place.marker.infowindow.addListener('closeclick', function() { app.vm.deselectPlace(place) });
-    places.push(place);
-  });
-  app.vm.init(map, places);
-}
-
 var makeInfoWindowContent = function(place) {
   var html = '<div class="place-info"><h2 class="info-heading">' + place.name +
     '</h2><div class="yelp-info hidden" id="yelp-' + place.businessID + '"></div></div>'
@@ -42,7 +18,7 @@ var getYelpData = function(place) {
   var parameters = {
         oauth_consumer_key: YELP_CONSUMER_KEY,
         oauth_token: YELP_TOKEN,
-        oauth_nonce: nonce_generate(),
+        oauth_nonce: (Math.floor(Math.random() * 1e12).toString()),
         oauth_signature_method: 'HMAC-SHA1',
         oauth_timestamp: Math.floor(Date.now()/1000),
         callback: 'cb'
@@ -74,9 +50,6 @@ var populateYelpInfoDiv = function(yelpData, place) {
   var $yelpInfoDiv = $('#yelp-' + place.businessID);
   var $table = $('<table><tr><th>Yelp Rating:</th><td></td></tr></table>');
   var $ratingImg = $('<img class="yelp-rating-img" src="' + yelpData.rating_img_url + '" />');
-  //$ratingImg.on('load', function() {
-    //console.log('loaded!!!');
-  //});
   $table.find('td').append($ratingImg);
   $table.append('<tr><th>Phone Number:</th><td>' + yelpData.display_phone + '</td></tr>');
   var $img = $('<img class="place-img" src="' + yelpData.image_url + '" />');
@@ -96,10 +69,6 @@ var animateMarkerBounce = function(marker) {
 };
 
 var myGoogleApiKey = 'AIzaSyAxa0WW4eWUbfRUm2lB-Lzh-GP6LYibtpI';
-
-function nonce_generate() {
-  return (Math.floor(Math.random() * 1e12).toString());
-}
 
 var placesData = [
   {
@@ -164,31 +133,49 @@ var isSubstring = function(substring, string) {
   return string.toLowerCase().indexOf(substring.toLowerCase()) > -1;
 }
 
-var Place = function(data) {
-  this.name = data.name;
-  this.businessID = data.businessID;
-  this.location = data.location;
+var Place = function(placeData, map) {
+  this.name = placeData.name;
+  this.businessID = placeData.businessID;
+  this.location = placeData.location;
+  this.marker = {map: map};
 };
 
 function AppViewModel() {
   var self = this;
+  self.map = null;
   self.searchString = ko.observable('');
   self.selectedPlace = ko.observable(null);
+
+  var places = placesData.map(function(data) {return new Place(data)});
   self.allPlaces = ko.observableArray();
   self.visiblePlaces = ko.computed(function() {
     return ko.utils.arrayFilter(self.allPlaces(), function(place) {
-      return place.marker.map !== null;
+      return place.marker.map === self.map;
     });
   });
 
-  self.init = function(map, places) {
-    self.map = map;
-    self.allPlaces(places);
-  };
-
-  self.testFunction = function(item) {
-    console.log(item.name);
-  };
+  self.initMap = function() {
+    self.map = new google.maps.Map(document.getElementById('map'), {
+      center: MAP_CENTER,
+      zoom: 15,
+      disableDefaultUI: true
+    });
+    places.forEach(function(place) {
+      place.marker = new google.maps.Marker({
+        position: place.location,
+        title: place.name,
+        map: self.map,
+        animation: google.maps.Animation.DROP,
+        infowindow: new InfoBubble({ map: self.map, content: makeInfoWindowContent(place) })
+      });
+      place.marker.addListener('click', function() { self.selectPlace(place) });
+      place.marker.infowindow.addListener('closeclick', function() { self.deselectPlace(place) });
+      self.allPlaces.push(place);
+    });
+    google.maps.event.addListenerOnce(self.map, 'idle', function() {
+      console.log('map is done loading!');
+    });
+  }
 
   self.onSearchChange = function() {
     self.allPlaces(ko.utils.arrayMap(self.allPlaces(), function(place) {

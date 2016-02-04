@@ -1,7 +1,25 @@
+@media screen and (min-width: 500px) {
+    /*above 500px*/
+}
+
+@media screen and (min-width: 800px) {
+    /*above 800px*/
+}
+
+
+@media screen and (max-width: 800px) {
+    /*below 800px*/
+}
+
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+}
+
+img, embed,
+object, video {
+    max-width: 100%;
 }
 
 #map {
