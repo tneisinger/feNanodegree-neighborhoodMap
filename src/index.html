@@ -9,16 +9,21 @@
     <!--<link rel="stylesheet" media="screen and (min-width:500px)" href="over500px.css">-->
   </head>
   <body>
-    <div id="map"></div>
+    <a id="navicon" href="#navicon">
+      <img src="img/hamburger-icon-gray.svg" alt="menu">
+    </a>
     <div id="menu">
-      <input data-bind="textInput: searchString, event: {keyup: onSearchChange}" />
-      <div id="list">
-        <ul data-bind="foreach: visiblePlaces">
-          <li data-bind="text: name, click: $root.selectPlace, css: { selected:
-          $root.selectedPlace() === $data }"></li>
-        </ul>
+      <div id="menu-content">
+        <input placeholder="Search" data-bind="textInput: searchString, event: {keyup: onSearchChange}" />
+        <div id="list">
+          <ul data-bind="foreach: visiblePlaces">
+            <li data-bind="text: name, click: $root.selectPlace, css: { selected:
+            $root.selectedPlace() === $data }"></li>
+          </ul>
+        </div>
       </div>
     </div>
+    <div id="map"></div>
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/oauth-signature/dist/oauth-signature.js"></script>
     <script src="../node_modules/knockout/build/output/knockout-latest.js"></script>

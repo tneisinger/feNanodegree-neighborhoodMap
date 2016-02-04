@@ -1,6 +1,6 @@
 "use strict";
 
-var MAP_CENTER = {lat:34.03, lng: -118.394}
+var MAP_CENTER = {lat:34.027, lng: -118.401}
 
 var makeInfoWindowContent = function(place) {
   var html = '<div class="place-info"><h2 class="info-heading">' + place.name +
@@ -140,6 +140,14 @@ var Place = function(placeData, map) {
   this.marker = {map: map};
 };
 
+$('#navicon').click(function() {
+  $('#menu').addClass('open');
+});
+
+$('#map').click(function() {
+  $('#menu').removeClass('open');
+});
+
 function AppViewModel() {
   var self = this;
   self.map = null;
@@ -157,7 +165,7 @@ function AppViewModel() {
   self.initMap = function() {
     self.map = new google.maps.Map(document.getElementById('map'), {
       center: MAP_CENTER,
-      zoom: 15,
+      zoom: 13,
       disableDefaultUI: true
     });
     places.forEach(function(place) {
@@ -174,6 +182,7 @@ function AppViewModel() {
     });
     google.maps.event.addListenerOnce(self.map, 'idle', function() {
       console.log('map is done loading!');
+      //$('#map').focus();
     });
   }
 
