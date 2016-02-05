@@ -13,6 +13,7 @@
 
 html, body {
     height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
 }
@@ -20,6 +21,32 @@ html, body {
 img, embed,
 object, video {
     max-width: 100%;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    padding: 15px 15px 10px 15px;
+    /*text-align: center;*/
+}
+
+li + li {
+    border-top: 1px solid #ccc;
+}
+
+li:nth-child(odd) {
+    /*background: #e5f2ff;*/
+    background: #ffffe5;
+}
+
+.map-marker-img {
+    display: inline-block;
+    width: 20px;
+    margin: 0 5px 5px 0;
 }
 
 #map {
@@ -44,7 +71,7 @@ object, video {
 }
 
 #menu {
-    width: 250px;
+    width: 270px;
     height: 100%;
     position: absolute;
     z-index: 2;
@@ -58,9 +85,36 @@ object, video {
     transform: translate(0, 0);
 }
 
+#list {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    overflow-y: scroll;
+    max-height: calc(100% - 55px);
+    margin: 0 5px;
+}
 
-#menu-content {
-    margin: 10px;
+input {
+    /*outline: none;*/
+    height: 30px;
+    width: 80%;
+    border: none;
+    font-size: 1.25em;
+    display: block;
+    margin: 10px auto;
+    padding: 0;
+}
+
+.list-place-info {
+    display: inline-block;
+}
+
+p {
+    margin: 0;
+}
+
+.list-place-address {
+    font-size: 0.5em;
+    margin-top: 5px;
 }
 
 .place-info {
@@ -97,5 +151,5 @@ object, video {
 }
 
 .selected {
-    color: red;
+    background-color: #f66 !important;
 }

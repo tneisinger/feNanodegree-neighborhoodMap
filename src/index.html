@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>Neighborhood Map</title>
+    <link rel="stylesheet" href="../node_modules/normalize.css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
     <!--<link rel="stylesheet" media="screen and (min-width:500px)" href="over500px.css">-->
   </head>
@@ -13,14 +14,17 @@
       <img src="img/hamburger-icon-gray.svg" alt="menu">
     </a>
     <div id="menu">
-      <div id="menu-content">
-        <input placeholder="Search" data-bind="textInput: searchString, event: {keyup: onSearchChange}" />
-        <div id="list">
-          <ul data-bind="foreach: visiblePlaces">
-            <li data-bind="text: name, click: $root.selectPlace, css: { selected:
-            $root.selectedPlace() === $data }"></li>
-          </ul>
-        </div>
+      <input placeholder="Search" data-bind="textInput: searchString, event: {keyup: onSearchChange}" />
+      <div id="list">
+        <ul data-bind="foreach: visiblePlaces">
+          <li data-bind="click: $root.selectPlace, css: { selected: $root.selectedPlace() === $data }">
+            <img class="map-marker-img" src="img/map-marker.svg" alt="menu">
+            <div class="list-place-info">
+              <p data-bind="text: name"></p>
+              <p class="list-place-address">3330 S. Durango Ave, Los Angeles CA 90034</p>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
     <div id="map"></div>
