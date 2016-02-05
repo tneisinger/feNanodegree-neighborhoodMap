@@ -64,7 +64,7 @@ var populateYelpInfoDiv = function(yelpData, place) {
 var animateMarkerBounce = function(marker) {
   if (marker.getAnimation() === null) {
     marker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(function() { marker.setAnimation(null) }, 1400);
+    setTimeout(function() { marker.setAnimation(null) }, 775);
   }
 };
 
