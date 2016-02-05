@@ -48,10 +48,10 @@ var getYelpData = function(place) {
 
 var populateYelpInfoDiv = function(yelpData, place) {
   var $yelpInfoDiv = $('#yelp-' + place.businessID);
-  var $table = $('<table><tr><th>Yelp Rating:</th><td></td></tr></table>');
+  var $table = $('<table><tr><th>Rating:</th><td></td></tr></table>');
   var $ratingImg = $('<img class="yelp-rating-img" src="' + yelpData.rating_img_url + '" />');
   $table.find('td').append($ratingImg);
-  $table.append('<tr><th>Phone Number:</th><td>' + yelpData.display_phone + '</td></tr>');
+  $table.append('<tr><th>Phone:</th><td>' + yelpData.display_phone + '</td></tr>');
   var $img = $('<img class="place-img" src="' + yelpData.image_url + '" />');
   $yelpInfoDiv.append($img);
   $yelpInfoDiv.append($table);

@@ -94,13 +94,13 @@ li:nth-child(odd) {
 }
 
 input {
-    /*outline: none;*/
+    outline: none;
     height: 30px;
-    width: 80%;
+    width: 75%;
     border: none;
     font-size: 1.25em;
     display: block;
-    margin: 10px auto;
+    margin: 10px 0 10px 20px;
     padding: 0;
 }
 
@@ -119,12 +119,13 @@ p {
 
 .place-info {
     text-align: center;
-    height: 240px;
-    width: 230px;
+    height: 170px;
+    width: 170px;
 }
 
 .place-info h2 {
     margin: 10px 0 0 0;
+    font-size: 1.25em;
 }
 
 .hidden {
@@ -146,8 +147,7 @@ p {
 
 .place-img {
     border-radius: 5px;
-    width: 150px;
-    margin: 10px 0 10px 0;
+    margin: 10px 0;
 }
 
 .selected {
