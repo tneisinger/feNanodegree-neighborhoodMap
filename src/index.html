@@ -7,18 +7,19 @@
     <title>Neighborhood Map</title>
     <link rel="stylesheet" href="../node_modules/normalize.css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
+    <!-- TODO: Don't leave this commented out.  Use it or don't. -->
     <!--<link rel="stylesheet" media="screen and (min-width:500px)" href="over500px.css">-->
   </head>
   <body>
-    <a id="navicon" href="#navicon">
-      <img src="img/hamburger-icon-gray.svg" alt="menu">
+    <a id="hamburger-button" href="#hamburger-button">
+      <img src="img/hamburger-icon.svg" alt="menu">
     </a>
-    <div id="menu">
+    <aside id="search-menu">
       <input placeholder="Search" data-bind="textInput: searchString, event: {keyup: onSearchChange}" />
-      <div id="list">
+      <div id="list-div">
         <ul data-bind="foreach: visiblePlaces">
           <li data-bind="click: $root.selectPlace, css: { selected: $root.selectedPlace() === $data }">
-            <img class="map-marker-img" src="img/map-marker.svg" alt="menu">
+            <img class="map-marker-img" src="img/map-marker.svg" alt="map marker logo">
             <div class="list-place-info">
               <p data-bind="text: name"></p>
               <p class="list-place-address">3330 S. Durango Ave, Los Angeles CA 90034</p>
@@ -26,7 +27,7 @@
           </li>
         </ul>
       </div>
-    </div>
+    </aside>
     <div id="map"></div>
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/oauth-signature/dist/oauth-signature.js"></script>
@@ -38,5 +39,3 @@
     </script>
   </body>
 </html>
-
-

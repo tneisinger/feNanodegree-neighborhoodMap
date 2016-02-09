@@ -13,3 +13,5 @@
 - Add 'Show All' button?
 
 - Add 'Recenter' button?
+
+- If user touches or clicks on an INFOWINDOW while list is open, list closes

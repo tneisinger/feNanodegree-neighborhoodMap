@@ -1,16 +1,4 @@
-@media screen and (min-width: 500px) {
-    /*above 500px*/
-}
-
-@media screen and (min-width: 800px) {
-    /*above 800px*/
-}
-
-
-@media screen and (max-width: 800px) {
-    /*below 800px*/
-}
-
+/* General */
 html, body {
     height: 100%;
     width: 100%;
@@ -23,6 +11,75 @@ object, video {
     max-width: 100%;
 }
 
+p {
+    margin: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+
+/* Google Maps */
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+
+/* Hamburger Icon */
+#hamburger-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 1;
+    background-color: white;
+    box-shadow: 3px 3px 3px #888;
+    border-radius: 5px;
+    outline: none;
+}
+
+#hamburger-button img {
+    margin: 7px 10px 2px 10px;
+    width: 30px;
+}
+
+
+/* Search Menu */
+#search-menu {
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+    background: white;
+    box-shadow: 5px 0 8px #888;
+    width: 270px;
+    transform: translate(-280px, 0);
+    transition: transform 0.3s ease;
+}
+
+#search-menu.open {
+    transform: translate(0, 0);
+}
+
+input {
+    outline: none;
+    height: 30px;
+    width: 75%;
+    border: none;
+    font-size: 1.25em;
+    display: block;
+    margin: 10px 0 10px 20px;
+    padding: 0;
+}
+
+#list-div {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    overflow-y: auto;
+    max-height: calc(100% - 55px);
+    margin: 0 5px;
+}
+
 ul {
     list-style-type: none;
     padding: 0;
@@ -31,7 +88,10 @@ ul {
 
 li {
     padding: 15px 15px 10px 15px;
-    /*text-align: center;*/
+}
+
+.selected {
+    background-color: #f66 !important;
 }
 
 li + li {
@@ -49,67 +109,8 @@ li:nth-child(odd) {
     margin: 0 5px 5px 0;
 }
 
-#map {
-    height: 100%;
-    width: 100%;
-}
-
-#navicon {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 1;
-    background-color: white;
-    box-shadow: 3px 3px 3px #888;
-    border-radius: 5px;
-    outline: none;
-}
-
-#navicon img {
-    margin: 7px 10px 2px 10px;
-    width: 30px;
-}
-
-#menu {
-    width: 270px;
-    height: 100%;
-    position: absolute;
-    z-index: 2;
-    transform: translate(-300px, 0);
-    transition: transform 0.3s ease;
-    background: white;
-    box-shadow: 5px 0 8px #888;
-}
-
-#menu.open {
-    transform: translate(0, 0);
-}
-
-#list {
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    overflow-y: scroll;
-    max-height: calc(100% - 55px);
-    margin: 0 5px;
-}
-
-input {
-    outline: none;
-    height: 30px;
-    width: 75%;
-    border: none;
-    font-size: 1.25em;
-    display: block;
-    margin: 10px 0 10px 20px;
-    padding: 0;
-}
-
 .list-place-info {
     display: inline-block;
-}
-
-p {
-    margin: 0;
 }
 
 .list-place-address {
@@ -117,19 +118,17 @@ p {
     margin-top: 5px;
 }
 
-.place-info {
+
+/* Info Window */
+.info-window {
     text-align: center;
     height: 170px;
     width: 170px;
 }
 
-.place-info h2 {
+.iw-header {
     margin: 10px 0 0 0;
     font-size: 1.25em;
-}
-
-.hidden {
-    display: none;
 }
 
 .yelp-info table {
@@ -145,11 +144,15 @@ p {
     text-align:left;
 }
 
-.place-img {
+.yelp-img {
     border-radius: 5px;
     margin: 10px 0;
 }
 
-.selected {
-    background-color: #f66 !important;
+
+/* Media Queries */
+@media screen and (min-width: 800px) {
+    #search-menu {
+        width: 350px;
+        transform: translate(-360px);
 }

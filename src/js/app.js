@@ -1,13 +1,96 @@
 "use strict";
 
+/* Constants */
 var MAP_CENTER = {lat:34.027, lng: -118.401}
 
-var makeInfoWindowContent = function(place) {
-  var html = '<div class="place-info"><h2 class="info-heading">' + place.name +
-    '</h2><div class="yelp-info hidden" id="yelp-' + place.businessID + '"></div></div>'
+
+/* General Utility Functions */
+var isSubstring = function(substring, string) {
+  return string.toLowerCase().indexOf(substring.toLowerCase()) > -1;
+}
+
+
+/* Raw data for the places that display on the map by default */
+var placesData = [
+  {
+    name: 'Versailles',
+    yelpID: 'versailles-restaurant-los-angeles',
+    location: {'lat': 34.0210938, 'lng': -118.4036178},
+    yelpDataReceived: false
+  }, {
+    name: 'Ugly Roll Sushi',
+    yelpID: 'ugly-roll-sushi-los-angeles',
+    location: {'lat' : 34.0193032, 'lng' : -118.421074},
+    yelpDataReceived: false
+  }, {
+    name: 'Tara\'s Himalayan Cuisine',
+    yelpID: 'taras-himalayan-cuisine-los-angeles',
+    location : {'lat': 34.0170293, 'lng' : -118.4105646},
+    yelpDataReceived: false
+  }, {
+    name: 'Father\'s Office',
+    yelpID: 'fathers-office-los-angeles',
+    location: {'lat': 34.0303965, 'lng': -118.3847834},
+    yelpDataReceived: false
+  }, {
+    name: 'Public School 310',
+    yelpID: 'public-school-310-culver-city-2',
+    location: {'lat': 34.0243015, 'lng': -118.3944333},
+    yelpDataReceived: false
+  }, {
+    name: 'S & W Country Diner',
+    yelpID: 's-and-w-country-diner-culver-city',
+    location: {'lat': 34.02201069999999, 'lng': -118.3965204},
+    yelpDataReceived: false
+  }, {
+    name: 'Pinches Tacos',
+    yelpID: 'pinches-tacos-culver-city',
+    location: {'lat': 34.0301895, 'lng': -118.3831161},
+    yelpDataReceived: false
+  }, {
+    name: 'The Jerk Spot',
+    yelpID: 'the-jerk-spot-culver-city',
+    location: {'lat': 34.0274507, 'lng': -118.3908833},
+    yelpDataReceived: false
+  }, {
+    name: 'Campos Tacos',
+    yelpID: 'campos-tacos-los-angeles',
+    location: {'lat': 34.0377103, 'lng': -118.388866},
+    yelpDataReceived: false
+  }, {
+    name: 'Overland Cafe',
+    yelpID: 'the-overland-los-angeles',
+    location: {'lat': 34.0222854, 'lng': -118.410024},
+    yelpDataReceived: false
+  }, {
+    name: 'K & A Canton Restaurant',
+    yelpID: 'k-and-a-canton-restaurant-los-angeles',
+    location: {'lat': 34.0308305, 'lng': -118.4008722},
+    yelpDataReceived: false
+  }
+];
+
+
+/* Constructor for Place objects */
+var Place = function(placeData, map) {
+  this.name = placeData.name;
+  this.yelpID = placeData.yelpID;
+  this.location = placeData.location;
+  this.marker = {map: map};
+};
+
+
+
+/* Info Window Helper Functions */
+
+// Make initial html for the given Place's info window.
+var makeInfoWindowHTML = function(place) {
+  var html = '<div class="info-window"><h2 class="iw-header">' + place.name +
+    '</h2><div class="yelp-info hidden" id="yelp-' + place.yelpID + '"></div></div>'
   return html;
 };
 
+// Make an ajax request to the yelp business api
 var getYelpData = function(place) {
   var YELP_URL = 'https://api.yelp.com/v2/business/';
   var YELP_CONSUMER_KEY = 'GbivRhbPwg0gh-ti0WxOzw';
@@ -24,7 +107,7 @@ var getYelpData = function(place) {
         callback: 'cb'
       };
 
-  var url = YELP_URL + place.businessID;
+  var url = YELP_URL + place.yelpID;
   var signature = oauthSignature.generate('GET', url, parameters, YELP_CONSUMER_SECRET, YELP_TOKEN_SECRET);
   parameters.oauth_signature = signature;
 
@@ -46,13 +129,15 @@ var getYelpData = function(place) {
   $.ajax(settings);
 };
 
+// Fill in the yelp-info div of the given place's info window with data
+// returned from a yelp business api request.
 var populateYelpInfoDiv = function(yelpData, place) {
-  var $yelpInfoDiv = $('#yelp-' + place.businessID);
+  var $yelpInfoDiv = $('#yelp-' + place.yelpID);
   var $table = $('<table><tr><th>Rating:</th><td></td></tr></table>');
   var $ratingImg = $('<img class="yelp-rating-img" src="' + yelpData.rating_img_url + '" />');
   $table.find('td').append($ratingImg);
   $table.append('<tr><th>Phone:</th><td>' + yelpData.display_phone + '</td></tr>');
-  var $img = $('<img class="place-img" src="' + yelpData.image_url + '" />');
+  var $img = $('<img class="yelp-img" src="' + yelpData.image_url + '" />');
   $yelpInfoDiv.append($img);
   $yelpInfoDiv.append($table);
   $img.on('load', function() { $yelpInfoDiv.fadeIn('slow', function() {
@@ -61,6 +146,9 @@ var populateYelpInfoDiv = function(yelpData, place) {
   }) });
 }
 
+
+/* Map Marker Animations */ 
+
 var animateMarkerBounce = function(marker) {
   if (marker.getAnimation() === null) {
     marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -68,124 +156,89 @@ var animateMarkerBounce = function(marker) {
   }
 };
 
-var myGoogleApiKey = 'AIzaSyAxa0WW4eWUbfRUm2lB-Lzh-GP6LYibtpI';
 
-var placesData = [
-  {
-    name: 'Versailles',
-    businessID: 'versailles-restaurant-los-angeles',
-    location: {'lat': 34.0210938, 'lng': -118.4036178},
-    yelpDataReceived: false
-  }, {
-    name: 'Ugly Roll Sushi',
-    businessID: 'ugly-roll-sushi-los-angeles',
-    location: {'lat' : 34.0193032, 'lng' : -118.421074},
-    yelpDataReceived: false
-  }, {
-    name: 'Tara\'s Himalayan Cuisine',
-    businessID: 'taras-himalayan-cuisine-los-angeles',
-    location : {'lat': 34.0170293, 'lng' : -118.4105646},
-    yelpDataReceived: false
-  }, {
-    name: 'Father\'s Office',
-    businessID: 'fathers-office-los-angeles',
-    location: {'lat': 34.0303965, 'lng': -118.3847834},
-    yelpDataReceived: false
-  }, {
-    name: 'Public School 310',
-    businessID: 'public-school-310-culver-city-2',
-    location: {'lat': 34.0243015, 'lng': -118.3944333},
-    yelpDataReceived: false
-  }, {
-    name: 'S & W Country Diner',
-    businessID: 's-and-w-country-diner-culver-city',
-    location: {'lat': 34.02201069999999, 'lng': -118.3965204},
-    yelpDataReceived: false
-  }, {
-    name: 'Pinches Tacos',
-    businessID: 'pinches-tacos-culver-city',
-    location: {'lat': 34.0301895, 'lng': -118.3831161},
-    yelpDataReceived: false
-  }, {
-    name: 'The Jerk Spot',
-    businessID: 'the-jerk-spot-culver-city',
-    location: {'lat': 34.0274507, 'lng': -118.3908833},
-    yelpDataReceived: false
-  }, {
-    name: 'Campos Tacos',
-    businessID: 'campos-tacos-los-angeles',
-    location: {'lat': 34.0377103, 'lng': -118.388866},
-    yelpDataReceived: false
-  }, {
-    name: 'Overland Cafe',
-    businessID: 'the-overland-los-angeles',
-    location: {'lat': 34.0222854, 'lng': -118.410024},
-    yelpDataReceived: false
-  }, {
-    name: 'K & A Canton Restaurant',
-    businessID: 'k-and-a-canton-restaurant-los-angeles',
-    location: {'lat': 34.0308305, 'lng': -118.4008722},
-    yelpDataReceived: false
-  }
-];
+/* Setup Search Menu Slide Animations */
 
-var isSubstring = function(substring, string) {
-  return string.toLowerCase().indexOf(substring.toLowerCase()) > -1;
-}
-
-var Place = function(placeData, map) {
-  this.name = placeData.name;
-  this.businessID = placeData.businessID;
-  this.location = placeData.location;
-  this.marker = {map: map};
-};
-
-$('#navicon').click(function() {
-  $('#menu').addClass('open');
+// When the hamburger icon is clicked, slide in the search menu
+$('#hamburger-button').click(function() {
+  $('#search-menu').addClass('open');
 });
 
+// When the map is clicked, slide out the search menu
 $('#map').click(function() {
-  $('#menu').removeClass('open');
+  $('#search-menu').removeClass('open');
 });
 
+
+/* App ViewModel */
 function AppViewModel() {
   var self = this;
   self.map = null;
+
+  // searchSring is the value inside the input element at the top of the search-menu
   self.searchString = ko.observable('');
+
+  // selectedPlace is the Place Object that has been selected by the user.
   self.selectedPlace = ko.observable(null);
 
-  var places = placesData.map(function(data) {return new Place(data)});
-  self.allPlaces = ko.observableArray();
+  // Array of all Place objects.
+  self.allPlaces = ko.observableArray(placesData.map(function(data) {return new Place(data)}));
+
+  // Array of all the Place objects whose map markers are visible on the map
   self.visiblePlaces = ko.computed(function() {
     return ko.utils.arrayFilter(self.allPlaces(), function(place) {
       return place.marker.map === self.map;
     });
   });
 
+  // This method is the callback for the google maps api script
   self.initMap = function() {
+
+    // Create the map
     self.map = new google.maps.Map(document.getElementById('map'), {
       center: MAP_CENTER,
       zoom: 13,
       disableDefaultUI: true
     });
+
+    // Get all the Place objects
+    var places = self.allPlaces();
+
+    // Create a temporary array for storing the updated Place objects
+    var placesWithMarkers = [];
+
+    // Give each Place object a map marker and an info window
     places.forEach(function(place) {
       place.marker = new google.maps.Marker({
         position: place.location,
         title: place.name,
         map: self.map,
         animation: google.maps.Animation.DROP,
-        infowindow: new InfoBubble({ map: self.map, content: makeInfoWindowContent(place) })
+        infowindow: new InfoBubble({ map: self.map, content: makeInfoWindowHTML(place) })
       });
+      
+      // Add event listeners to markers and info windows
       place.marker.addListener('click', function() { self.selectPlace(place) });
       place.marker.infowindow.addListener('closeclick', function() { self.deselectPlace(place) });
-      self.allPlaces.push(place);
+
+      // Append this Place object to the temporary array
+      placesWithMarkers.push(place);
     });
+    
+    // Replace the objects in allPlaces with the new Place objects.
+    self.allPlaces(placesWithMarkers);
+
+    // TODO: When the map is finished loading, do something
     google.maps.event.addListenerOnce(self.map, 'idle', function() {
       console.log('map is done loading!');
       //$('#map').focus();
     });
   }
 
+  // When the user changes the searchString, map over allPlaces.
+  // If the new searchString is a subtring of a given place's name, show that
+  // place's map marker.  Otherwise, hide that place's map marker, and if that
+  // place is the selectedPlace, deselect that place.
   self.onSearchChange = function() {
     self.allPlaces(ko.utils.arrayMap(self.allPlaces(), function(place) {
       if (isSubstring(self.searchString(), place.name)) {
@@ -198,21 +251,43 @@ function AppViewModel() {
     }));
   };
 
+  // This method runs whenever a Place object is selected.
+  // A Place object can be selected by either clicking on its map marker or by
+  // clicking on its corresponding <li> element in the search menu.
   self.selectPlace = function(place) {
+
+    // If the yelp data for this Place hasn't been retrieved, request it
     if (!place.yelpDataReceived) { getYelpData(place) }
+
+    // If another Place is currently selected, close its info window and set
+    // the given Place as the selectedPlace
     if (self.selectedPlace()) { self.selectedPlace().marker.infowindow.close() }
     self.selectedPlace(place);
+
+    // Animate the given Place's map marker
     animateMarkerBounce(place.marker);
+
+    // Open the given Place's map marker
     place.marker.infowindow.open(self.map, place.marker);
   };
 
+  // Deselect the given Place.
+  // The current selected Place gets deselected whenever its info window is
+  // closed, or if the user enters a search string in the search menu that
+  // isn't a substring of the selected Place's name.
   self.deselectPlace = function(place) {
-    if (place && self.selectedPlace() === place) {
-      place.marker.infowindow.close();
-      self.selectedPlace(null);
-    }
+    // TODO: Decide of the following code is necessary.  IF NOT, remove 'place'
+    // argument above and in all calls of this function.
+    //
+    //if (place && self.selectedPlace() === place) {
+      //place.marker.infowindow.close();
+      //self.selectedPlace(null);
+    //}
+    self.selectedPlace().marker.infowindow.close();
+    self.selectedPlace(null);
   };
 }
 
+/* Kickoff the app */
 var app = { vm: new AppViewModel() };
 ko.applyBindings(app.vm);
