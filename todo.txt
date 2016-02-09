@@ -1,0 +1,15 @@
+- Beautify the map appearance and marker appearance
+
+- Beautify info windows
+
+- Add addresses to placesData and display correct addresses in list view
+
+- Comment up the code!
+
+- Add 'X' 'Clear Search String' button to list view
+
+- Maybe hide list after selection is made on very narrow screens?
+
+- Add 'Show All' button?
+
+- Add 'Recenter' button?
