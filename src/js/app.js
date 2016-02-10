@@ -98,7 +98,7 @@ var Place = function(placeData, map) {
 var makeInfoWindowHTML = function(place) {
   var html = '<div class="iw-container"><div class="iw-header"><h2 class="iw-title">' +
     place.name + '</h2></div><div class="iw-content"><div class="yelp-info hidden" id="yelp-' +
-    place.yelpID + '"></div></div></div>'
+    place.yelpID + '"></div><div class="iw-bottom-gradient"></div></div></div>'
   return html;
 };
 
@@ -191,7 +191,6 @@ var fillYelpInfoDiv = function(yelpData, place) {
   }) });
 };
 
-
 /* Map Marker Animations */ 
 
 var animateMarkerBounce = function(marker) {
@@ -265,6 +264,55 @@ function AppViewModel() {
       // Add event listeners to markers and info windows
       place.marker.addListener('click', function() { self.selectPlace(place) });
       place.marker.infowindow.addListener('closeclick', function() { self.deselectPlace(place) });
+
+      // Change the default styles for info windows.
+      // Code from: http://en.marnoto.com/2014/09/5-formas-de-personalizar-infowindow.html
+      place.marker.infowindow.addListener('domready', function() {
+        var iwOuter = $('.gm-style-iw');
+        var iwBackground = iwOuter.prev();
+        iwBackground.children(':nth-child(2)').css({'display': 'none'});
+        iwBackground.children(':nth-child(4)').css({'display': 'none'});
+
+        // Move the tail of the info window on top of the main info window div
+        iwBackground.children(':nth-child(3)').find('div').children().css({
+          top: '-4px',
+          'z-index': '1'
+        });
+
+        // Get a reference to the close button
+        var iwCloseBtn = iwOuter.next();
+
+        // Get a reference to the transparent image which functions as the
+        // close trigger
+        var iwCloseTransparent = iwCloseBtn.next();
+
+        // Move and style the close button
+        iwCloseBtn.css({
+          opacity: '1',
+          right: '57px', top: '22px',
+          border: '2px solid #13729f',
+          'border-radius': '5px'
+        });
+
+        // Move the transparent image to cover the close button
+        iwCloseTransparent.css({
+          right: '45px',
+          top: '15px',
+
+          // The following css rules prevent a small transparent blue square
+          // from appearing in chrome for android. Without these rules, the
+          // blue square will appear whenever an info window's close button is tapped.
+          '-webkit-touch-callout': 'none',
+          '-webkit-user-select': 'none',
+          '-khtml-user-select': 'none',
+          '-moz-user-select': 'none',
+          '-ms-user-select': 'none',
+          'user-select': 'none',
+          // Below is the rule that definitely removed the blue square
+          '-webkit-tap-highlight-color': 'rgba(255, 255, 255, 0)'
+        });
+      });
+
 
       // Append this Place object to the temporary array
       placesWithMarkers.push(place);
