@@ -1,4 +1,4 @@
-- Beautify the map appearance and marker appearance
+- Beautify the map and marker load in
 
 - Beautify info windows
 

@@ -120,33 +120,75 @@ li:nth-child(odd) {
 
 
 /* Info Window */
-.info-window {
-    text-align: center;
-    height: 170px;
-    width: 170px;
+
+.iw-container {
+    max-width: 250px;
+    height: 100%;
 }
 
 .iw-header {
-    margin: 10px 0 0 0;
-    font-size: 1.25em;
+    background-color: #48b5e9;
+    text-align: center;
+    color: white;
+    border-radius: 2px 2px 0 0;
+    padding: 5px 5px;
+    margin-bottom: 10px;
 }
 
-.yelp-info table {
-    margin: 0 auto;
+.iw-title {
+    margin: 0;
 }
 
-.yelp-info th {
-    text-align: right;
+
+.iw-content {
+    padding: 0 10px;
+    overflow-y: auto !important;
+    height: 100%;
+    max-height: 150px;
 }
 
-.yelp-info td {
-    padding-left: 10px;
-    text-align:left;
+div.snippet-and-img-div {
+    display: flex;
+    display: -webkit-flex;
+    margin: 0 0 20px 0;
+}
+
+.yelp-snippet-div {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.yelp-img-div {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .yelp-img {
     border-radius: 5px;
-    margin: 10px 0;
+    margin: auto 0 auto 10px;
+}
+
+
+.yelp-info table {
+    margin: 0 auto;
+    font-size: 1.25em;
+}
+
+.yelp-info tr {
+}
+
+.yelp-info th {
+    text-align: right;
+    padding: 0 0 10px 0;
+}
+
+.yelp-info td {
+    text-align:left;
+    padding: 0 0 10px 20px;
 }
 
 
