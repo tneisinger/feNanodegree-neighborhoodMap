@@ -1,12 +1,8 @@
 - Beautify the map and marker load in
 
-- Beautify info windows
-
 - Add addresses to placesData and display correct addresses in list view
 
 - Comment up the code!
-
-- Add 'X' 'Clear Search String' button to list view
 
 - Maybe hide list after selection is made on very narrow screens?
 
@@ -14,4 +10,6 @@
 
 - Add 'Recenter' button?
 
-- If user touches or clicks on an INFOWINDOW while list is open, list closes
+- If user touches or clicks on an INFOWINDOW while list is open, list should close
+
+- fix info window tails on short screens (landscape mode on my phone)
