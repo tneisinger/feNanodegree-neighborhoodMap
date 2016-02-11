@@ -72,6 +72,14 @@ input {
     padding: 0;
 }
 
+#clear-search-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5em;
+    color: #888;
+}
+
 #list-div {
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;

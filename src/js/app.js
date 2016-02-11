@@ -344,6 +344,11 @@ function AppViewModel() {
     }));
   };
 
+  self.clearSearchString = function() {
+    self.searchString('');
+    self.onSearchChange();
+  };
+
   // This method runs whenever a Place object is selected.
   // A Place object can be selected by either clicking on its map marker or by
   // clicking on its corresponding <li> element in the search menu.

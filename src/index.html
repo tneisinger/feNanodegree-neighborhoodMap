@@ -16,6 +16,7 @@
     </a>
     <aside id="search-menu">
       <input placeholder="Search" data-bind="textInput: searchString, event: {keyup: onSearchChange}" />
+      <span id="clear-search-btn" data-bind="click: $root.clearSearchString, css: { hidden: $root.searchString() === ''}">x</span>
       <div id="list-div">
         <ul data-bind="foreach: visiblePlaces">
           <li data-bind="click: $root.selectPlace, css: { selected: $root.selectedPlace() === $data }">
