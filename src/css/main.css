@@ -81,8 +81,7 @@ input {
 }
 
 #list-div {
-    /*background: #ffffe5;*/
-    border-top: 1px solid #999;
+    border-top: 1px solid #48b5e9;
     border-bottom: 1px solid #ccc;
     overflow-y: auto;
     max-height: calc(100% - 55px);
