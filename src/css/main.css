@@ -131,6 +131,7 @@ li:nth-child(odd) {
 
 .gm-style-iw {
     width: 280px !important;
+    height: 195px !important;
     top: 15px !important;
     left: 0 !important;
     border-radius: 10px;
@@ -141,6 +142,7 @@ li:nth-child(odd) {
 .iw-container {
     width: 280px;
     height: 100%;
+    overflow: hidden;
 }
 
 .iw-header {
@@ -148,19 +150,27 @@ li:nth-child(odd) {
     text-align: center;
     color: white;
     border-radius: 2px 2px 0 0;
-    padding: 5px 5px;
+    padding: 0;
     box-shadow: 0 3px 3px #bbb;
+    height: 30px;
 }
 
-.iw-title {
+.iw-header h2 {
     margin: 0;
+    padding: 3px 0;
 }
 
 .iw-content {
-    padding: 15px 10px 10px 10px;
-    overflow-y: auto !important;
+    padding: 15px 15px 0px 15px;
+    overflow-y: auto;
     height: 150px;
 }
+
+
+::-webkit-scrollbar {
+    display: none;
+}
+
 
 div.snippet-and-img-div {
     display: flex;
@@ -189,7 +199,7 @@ div.snippet-and-img-div {
 
 
 .yelp-info table {
-    margin: 0 auto;
+    margin: 0 auto 10px auto;
     font-size: 1.25em;
 }
 
@@ -211,7 +221,7 @@ div.snippet-and-img-div {
     position: absolute;
     width: 280px;
     height: 40px;
-    bottom: 3px;
+    bottom: 0px;
     right: 16px;
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
     background: -webkit-linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
