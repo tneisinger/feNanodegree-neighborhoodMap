@@ -11,5 +11,3 @@
 - Add 'Recenter' button?
 
 - If user touches or clicks on an INFOWINDOW while list is open, list should close
-
-- fix info window tails on short screens (landscape mode on my phone)
