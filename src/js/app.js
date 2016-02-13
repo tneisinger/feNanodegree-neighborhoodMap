@@ -208,9 +208,13 @@ $('#hamburger-button').click(function() {
   $('#search-menu').addClass('open');
 });
 
-// When the map is clicked, slide out the search menu
-$('#map').click(function() {
-  $('#search-menu').removeClass('open');
+// When the map is clicked, hide the search menu
+$('#map').click(function(e) {
+
+  // If the click is on an info window close button, don't hide the search menu
+  if (e.target.tagName === 'IMG') { return }
+
+  $('#search-menu').removeClass('open');    // Hide search menu
 });
 
 
