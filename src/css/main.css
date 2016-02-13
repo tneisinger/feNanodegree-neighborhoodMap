@@ -27,11 +27,11 @@ p {
 }
 
 
-/* Hamburger Icon */
+/* Hamburger Button */
 #hamburger-button {
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 10px;
+    left: 10px;
     z-index: 1;
     background-color: white;
     box-shadow: 3px 3px 3px #888;
@@ -45,6 +45,40 @@ p {
     width: 30px;
 }
 
+
+/* Show All Button */
+
+#show-all-btn {
+    position: absolute;
+    /*top: 15px;*/
+    /*left: 70px;*/
+    top: 60px;
+    left: 10px;
+    z-index: 1;
+    background-color: white;
+    box-shadow: 3px 3px 3px #888;
+    border-radius: 10px;
+    outline: none;
+    opacity: 0.75;
+    padding: 0 5px 5px 5px;
+}
+
+
+#show-all-btn span {
+    font-weight: bold;
+    font-size: 0.65em;
+    color: #888;
+    margin: 0;
+    padding: 0;
+}
+
+#show-all-btn img {
+    display: block;
+    width: 25px;
+    margin: 0 auto;
+    padding: 0;
+    vertical-align: middle;
+}
 
 /* Search Menu */
 #search-menu {

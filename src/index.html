@@ -14,6 +14,11 @@
     <a id="hamburger-button" href="#hamburger-button">
       <img src="img/hamburger-icon.svg" alt="menu">
     </a>
+    <div data-bind="css: {hidden: $root.searchString() === ''}" id="show-all-btn" class="hidden">
+    <!--<div id="show-all-btn">-->
+      <span>Show All</span>
+      <img class="map-marker-img" src="img/map-marker.svg" alt="map marker logo">
+    </div>
     <aside id="search-menu">
       <input placeholder="Search" data-bind="textInput: searchString, event: {keyup: onSearchChange}" />
       <span id="clear-search-btn" data-bind="click: $root.clearSearchString, css: { hidden: $root.searchString() === ''}">x</span>

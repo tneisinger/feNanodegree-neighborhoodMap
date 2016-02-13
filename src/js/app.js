@@ -217,7 +217,13 @@ $('#map').click(function(e) {
   if (e.target.tagName === 'IMG') { return }
 
   $('#search-menu').removeClass('open');    // Hide search menu
+
+  // Remove focus from the input when hiding the menu.
+  // This prevents the keyboard from constantly reappearing while the menu is
+  // closed.
+  $('#search-menu input').blur();
 });
+
 
 
 /* App ViewModel */
@@ -239,6 +245,13 @@ function AppViewModel() {
     return ko.utils.arrayFilter(self.allPlaces(), function(place) {
       return place.marker.map === self.map;
     });
+  });
+
+
+  // When the 'show all' button is clicked, clear the search input.
+  // Clearing the search input will automatically reveal all the markers
+  $('#show-all-btn').click(function() {
+    self.clearSearchString();
   });
 
   // This method is the callback for the google maps api script
