@@ -147,7 +147,7 @@ var getYelpData = function(place) {
 var yelpHTMLtemplate = `
   <div class="snippet-and-img-div">
     <div class="yelp-snippet-div">
-      <p class="yelp-snippet">{0}</p>
+      <p class="yelp-snippet">"{0}"</p>
     </div>
     <div class="yelp-img-div">
       <img class="yelp-img" src="{1}" />

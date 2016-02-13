@@ -228,6 +228,7 @@ div.snippet-and-img-div {
 .yelp-snippet-div {
     display: flex;
     display: -webkit-flex;
+    font-style: italic;
     flex-direction: column;
     justify-content: center;
 }
