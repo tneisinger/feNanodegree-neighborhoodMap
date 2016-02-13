@@ -258,9 +258,13 @@ function AppViewModel() {
         title: place.name,
         map: self.map,
         animation: google.maps.Animation.DROP,
-        infowindow: new google.maps.InfoWindow({ content: makeInfoWindowHTML(place) })
+        infowindow: new google.maps.InfoWindow({
+          content: makeInfoWindowHTML(place),
+          // Adjust the offset so that the info window tail ends on top of the marker
+          pixelOffset: new google.maps.Size(-1, 20)
+        })
       });
-      
+
       // Add event listeners to markers and info windows
       place.marker.addListener('click', function() { self.selectPlace(place) });
       place.marker.infowindow.addListener('closeclick', function() { self.deselectPlace(place) });
@@ -367,6 +371,7 @@ function AppViewModel() {
 
     // Open the given Place's map marker
     place.marker.infowindow.open(self.map, place.marker);
+
   };
 
   // Deselect the given Place.
