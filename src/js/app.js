@@ -27,47 +27,58 @@ var placesData = [
   {
     name: 'Versailles',
     yelpID: 'versailles-restaurant-los-angeles',
-    location: {'lat': 34.0210938, 'lng': -118.4036178}
+    location: {'lat': 34.0210938, 'lng': -118.4036178},
+    address: '10319 Venice Blvd, Los Angeles, CA 90034'
   }, {
     name: 'Ugly Roll Sushi',
     yelpID: 'ugly-roll-sushi-los-angeles',
-    location: {'lat' : 34.0193032, 'lng' : -118.421074}
+    location: {'lat' : 34.0193032, 'lng' : -118.421074},
+    address: '11128 Palms Blvd, Los Angeles, CA 90034'
   }, {
     name: 'Tara\'s Himalayan Cuisine',
     yelpID: 'taras-himalayan-cuisine-los-angeles',
-    location : {'lat': 34.0170293, 'lng' : -118.4105646}
+    location : {'lat': 34.0170293, 'lng' : -118.4105646},
+    address: '10855 Venice Blvd, Los Angeles, CA 90034'
   }, {
     name: 'Father\'s Office',
     yelpID: 'fathers-office-los-angeles',
-    location: {'lat': 34.0303965, 'lng': -118.3847834}
+    location: {'lat': 34.0303965, 'lng': -118.3847834},
+    address: '10319 Venice Blvd, Los Angeles, CA 90034'
   }, {
     name: 'Public School 310',
     yelpID: 'public-school-310-culver-city-2',
-    location: {'lat': 34.0243015, 'lng': -118.3944333}
+    location: {'lat': 34.0243015, 'lng': -118.3944333},
+    address: '9411 Culver Blvd, Culver City, CA 90232'
   }, {
     name: 'S & W Country Diner',
     yelpID: 's-and-w-country-diner-culver-city',
-    location: {'lat': 34.02201069999999, 'lng': -118.3965204}
+    location: {'lat': 34.02201069999999, 'lng': -118.3965204},
+    address: '9748 Washington Blvd, Culver City, CA 90232'
   }, {
     name: 'Pinches Tacos',
     yelpID: 'pinches-tacos-culver-city',
-    location: {'lat': 34.0301895, 'lng': -118.3831161}
+    location: {'lat': 34.0301895, 'lng': -118.3831161},
+    address: '8665 Washington Blvd, Culver City, CA 90232'
   }, {
     name: 'The Jerk Spot',
     yelpID: 'the-jerk-spot-culver-city',
-    location: {'lat': 34.0274507, 'lng': -118.3908833}
+    location: {'lat': 34.0274507, 'lng': -118.3908833},
+    address: '9006 Venice Blvd, Culver City, CA 90232'
   }, {
     name: 'Campos Tacos',
     yelpID: 'campos-tacos-los-angeles',
-    location: {'lat': 34.0377103, 'lng': -118.388866}
+    location: {'lat': 34.0377103, 'lng': -118.388866},
+    address: '2639 S Robertson Blvd, Los Angeles, CA 90034'
   }, {
     name: 'Overland Cafe',
     yelpID: 'the-overland-los-angeles',
-    location: {'lat': 34.0222854, 'lng': -118.410024}
+    location: {'lat': 34.0222854, 'lng': -118.410024},
+    address: '3601 Overland Ave, Los Angeles, CA 90034'
   }, {
     name: 'K & A Canton Restaurant',
     yelpID: 'k-and-a-canton-restaurant-los-angeles',
-    location: {'lat': 34.0308305, 'lng': -118.4008722}
+    location: {'lat': 34.0308305, 'lng': -118.4008722},
+    address: '9840 National Blvd, Los Angeles, CA 90034'
   }
 ];
 
@@ -78,6 +89,7 @@ var Place = function(placeData, map) {
   this.yelpID = placeData.yelpID;
   this.location = placeData.location;
   this.marker = {map: map};
+  this.address = placeData.address;
   this.yelpDataRecieved = false;
 };
 
