@@ -27,58 +27,47 @@ var placesData = [
   {
     name: 'Versailles',
     yelpID: 'versailles-restaurant-los-angeles',
-    location: {'lat': 34.0210938, 'lng': -118.4036178},
-    yelpDataReceived: false
+    location: {'lat': 34.0210938, 'lng': -118.4036178}
   }, {
     name: 'Ugly Roll Sushi',
     yelpID: 'ugly-roll-sushi-los-angeles',
-    location: {'lat' : 34.0193032, 'lng' : -118.421074},
-    yelpDataReceived: false
+    location: {'lat' : 34.0193032, 'lng' : -118.421074}
   }, {
     name: 'Tara\'s Himalayan Cuisine',
     yelpID: 'taras-himalayan-cuisine-los-angeles',
-    location : {'lat': 34.0170293, 'lng' : -118.4105646},
-    yelpDataReceived: false
+    location : {'lat': 34.0170293, 'lng' : -118.4105646}
   }, {
     name: 'Father\'s Office',
     yelpID: 'fathers-office-los-angeles',
-    location: {'lat': 34.0303965, 'lng': -118.3847834},
-    yelpDataReceived: false
+    location: {'lat': 34.0303965, 'lng': -118.3847834}
   }, {
     name: 'Public School 310',
     yelpID: 'public-school-310-culver-city-2',
-    location: {'lat': 34.0243015, 'lng': -118.3944333},
-    yelpDataReceived: false
+    location: {'lat': 34.0243015, 'lng': -118.3944333}
   }, {
     name: 'S & W Country Diner',
     yelpID: 's-and-w-country-diner-culver-city',
-    location: {'lat': 34.02201069999999, 'lng': -118.3965204},
-    yelpDataReceived: false
+    location: {'lat': 34.02201069999999, 'lng': -118.3965204}
   }, {
     name: 'Pinches Tacos',
     yelpID: 'pinches-tacos-culver-city',
-    location: {'lat': 34.0301895, 'lng': -118.3831161},
-    yelpDataReceived: false
+    location: {'lat': 34.0301895, 'lng': -118.3831161}
   }, {
     name: 'The Jerk Spot',
     yelpID: 'the-jerk-spot-culver-city',
-    location: {'lat': 34.0274507, 'lng': -118.3908833},
-    yelpDataReceived: false
+    location: {'lat': 34.0274507, 'lng': -118.3908833}
   }, {
     name: 'Campos Tacos',
     yelpID: 'campos-tacos-los-angeles',
-    location: {'lat': 34.0377103, 'lng': -118.388866},
-    yelpDataReceived: false
+    location: {'lat': 34.0377103, 'lng': -118.388866}
   }, {
     name: 'Overland Cafe',
     yelpID: 'the-overland-los-angeles',
-    location: {'lat': 34.0222854, 'lng': -118.410024},
-    yelpDataReceived: false
+    location: {'lat': 34.0222854, 'lng': -118.410024}
   }, {
     name: 'K & A Canton Restaurant',
     yelpID: 'k-and-a-canton-restaurant-los-angeles',
-    location: {'lat': 34.0308305, 'lng': -118.4008722},
-    yelpDataReceived: false
+    location: {'lat': 34.0308305, 'lng': -118.4008722}
   }
 ];
 
@@ -89,6 +78,7 @@ var Place = function(placeData, map) {
   this.yelpID = placeData.yelpID;
   this.location = placeData.location;
   this.marker = {map: map};
+  this.yelpDataRecieved = false;
 };
 
 
