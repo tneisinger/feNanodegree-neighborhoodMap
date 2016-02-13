@@ -98,7 +98,7 @@ var Place = function(placeData, map) {
 var makeInfoWindowHTML = function(place) {
   var html = '<div class="iw-container"><div class="iw-header"><h2 class="iw-title">' +
     place.name + '</h2></div><div class="iw-content"><div class="yelp-info hidden" id="yelp-' +
-    place.yelpID + '"></div><div class="iw-bottom-gradient"></div></div></div>'
+    place.yelpID + '"></div></div><div class="iw-bottom-gradient"></div></div>'
   return html;
 };
 
