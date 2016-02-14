@@ -156,12 +156,12 @@ var yelpHTMLtemplate = `
   <table>
     <tbody>
       <tr>
-        <th>Rating:</th>
         <td><img class="yelp-rating-img" src="{2}"></td>
+        <td class="open-or-closed is-{3}">{4}</td>
       </tr>
       <tr>
-        <th>Phone:</th>
-        <td>{3}</td>
+        <td>{5}</td>
+        <td><a href="{6}">View on Yelp</a></td>
       </tr>
     </tbody>
   </table>
@@ -169,11 +169,17 @@ var yelpHTMLtemplate = `
 
 var makeYelpHTML = function(yelpData, place) {
   var html = yelpHTMLtemplate;
+  var isOpenString = yelpData.is_closed ? "Closed Now" : "Open Now";
+  var yelpUrl = userOnMobileDevice ? yelpData.mobile_url : yelpData.url;
+
   var args = [
     yelpData.snippet_text,
     yelpData.image_url,
     yelpData.rating_img_url,
-    yelpData.display_phone
+    yelpData.is_closed ? 'closed' : 'open',
+    isOpenString,
+    yelpData.display_phone.substring(3),    // Remove country code from phone #
+    yelpUrl
   ];
   for (var i = 0; i < args.length; i++) {
     html = html.replace('{' + i + '}', args[i]);

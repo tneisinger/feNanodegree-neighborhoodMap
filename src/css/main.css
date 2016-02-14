@@ -213,6 +213,13 @@ li + li {
     height: 150px;
 }
 
+.iw-content a {
+    text-decoration: none;
+}
+
+iw-content a:hover {
+    text-decoration: underline;
+}
 
 ::-webkit-scrollbar {
     display: none;
@@ -222,7 +229,7 @@ li + li {
 div.snippet-and-img-div {
     display: flex;
     display: -webkit-flex;
-    margin: 0 0 20px 0;
+    margin-bottom: 15px;
 }
 
 .yelp-snippet-div {
@@ -242,26 +249,38 @@ div.snippet-and-img-div {
 
 .yelp-img {
     border-radius: 5px;
-    margin: auto 0 auto 10px;
+    margin-left: 10px;
 }
 
 
 .yelp-info table {
-    margin: 0 auto 10px auto;
+    margin: 0 auto 5px auto;
     font-size: 1.25em;
 }
 
-.yelp-info tr {
-}
-
-.yelp-info th {
-    text-align: right;
-    padding: 0 0 10px 0;
-}
-
 .yelp-info td {
-    text-align:left;
-    padding: 0 0 10px 20px;
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+.yelp-info td + td {
+    padding-left: 30px;
+}
+
+.yelp-rating-img {
+    vertical-align: middle;
+}
+
+.open-or-closed {
+    font-weight: bold;
+}
+
+.is-closed {
+    color: red;
+}
+
+.is-open {
+    color: green;
 }
 
 .iw-bottom-gradient {
