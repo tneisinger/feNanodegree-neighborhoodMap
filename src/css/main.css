@@ -176,6 +176,8 @@ li + li {
 
 /* Info Window */
 
+/* This class applies to divs which the google maps api generates
+ * automatically. They contain info window content. */
 .gm-style-iw {
     width: 280px !important;
     height: 195px !important;
@@ -184,6 +186,15 @@ li + li {
     border-radius: 10px;
     background-color: white;
     border: 1px solid #48b5e9;
+
+    /* The parent divs of all '.gm-style-iw' divs are a bit wider and taller
+     * than the visible part of the info windows on mobile, and were blocking
+     * clicks or touches onto the underlying map.  To fix this, app.js sets the
+     * parents of this class to 'pointer-events: none'.  But that change gets
+     * propagated down to all children.  In order for the info windows to be
+     * clickable, the 'pointer-events' attribute for this div class must be
+     * reset to 'auto'. */
+    pointer-events: auto;
 }
 
 .iw-container {

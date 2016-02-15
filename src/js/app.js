@@ -373,6 +373,14 @@ function AppViewModel() {
           'z-index': '1'
         });
 
+       // The parent divs of all '.gm-style-iw' divs are a bit wider and taller
+       // than the visible part of the info windows on mobile, and will block
+       // clicks or touches onto the underlying map.  To fix this, set these
+       // divs to 'pointer-events: none'.  (NOTE: This change will propagate
+       // down to children, so be sure to reset any children that should be
+       // clickable to 'pointer-events: auto'.)
+        iwOuter.parent().css({'pointer-events': 'none'});
+
         // Get a reference to the close button
         var iwCloseBtn = iwOuter.next();
 
@@ -385,7 +393,9 @@ function AppViewModel() {
           opacity: '1',
           right: '57px', top: '22px',
           border: '2px solid #13729f',
-          'border-radius': '5px'
+          'border-radius': '5px',
+          // Make sure that the close button is clickable
+          'pointer-events': 'auto'
         });
 
         // Move the transparent image to cover the close button
@@ -403,7 +413,10 @@ function AppViewModel() {
           '-ms-user-select': 'none',
           'user-select': 'none',
           // Below is the rule that definitely removed the blue square
-          '-webkit-tap-highlight-color': 'rgba(255, 255, 255, 0)'
+          '-webkit-tap-highlight-color': 'rgba(255, 255, 255, 0)',
+
+          // Make sure that this transparent div is clickable
+          'pointer-events': 'auto'
         });
       });
 
