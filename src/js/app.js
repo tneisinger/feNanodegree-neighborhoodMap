@@ -1,26 +1,35 @@
 "use strict";
 
-/* Constants */
+/* CONSTANTS */
+
 var MAP_CENTER = {lat:34.027, lng: -118.401}
 
+// Yelp API constants
+var YELP_URL = 'https://api.yelp.com/v2/business/';
+var YELP_CONSUMER_KEY = 'GbivRhbPwg0gh-ti0WxOzw';
+var YELP_CONSUMER_SECRET = 'Pd6KFyeX_hMAL2c5prD--cn--9Q';
+var YELP_TOKEN = 'IUGGqvuWCnEZz4Fx12Fik9la9Wb17jgI';
+var YELP_TOKEN_SECRET = 'XnxVSRkveoNhJp8jEjihFYo64h4';
 
-/* General Utility Functions */
+// Determine if the user is on a mobile device
+var USER_ON_MOBILE = mobileCheck();
+
+
+/* GENERAL FUNCTIONS */
 
 // Return true if the first string is a substring of the second string.
 var isSubstring = function(substring, string) {
   return string.toLowerCase().indexOf(substring.toLowerCase()) > -1;
 }
 
-// Return true if the user is using a mobile device.
+// Return true if the user is on a mobile device.
 // Code found at: http://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
-var mobileCheck = function() {
+function mobileCheck() {
   var check = false;
   (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))check = true})(navigator.userAgent||navigator.vendor||window.opera);
   return check;
-}
+};
 
-// Determine if the user is on a mobile device
-var userOnMobileDevice = mobileCheck();
 
 /* Raw data for the places that display on the map by default */
 var placesData = [
@@ -85,131 +94,157 @@ var placesData = [
 
 /* Constructor for Place objects */
 var Place = function(placeData, map) {
-  this.name = placeData.name;
-  this.yelpID = placeData.yelpID;
-  this.location = placeData.location;
-  this.marker = {map: map};
-  this.address = placeData.address;
-  this.yelpDataRecieved = false;
+  var self = this;
 
-  this.getAddress = function() {
-    return this.address.street + ', ' + this.address.city;
+  self.name = placeData.name;
+  self.yelpID = placeData.yelpID;
+  self.location = placeData.location;
+  self.marker = {map: map};
+  self.address = placeData.address;
+  self.yelpDataRecieved = false;
+
+  // Return the address, formatted for the search list
+  self.getAddress = function() {
+    return self.address.street + ', ' + self.address.city;
   }
-};
 
+  // Return the initial html for the info window.
+  self.makeInfoWindowHTML = function() {
 
-/* Info Window Helper Functions */
+    var html = `
+      <div class="iw-container">
+        <div class="iw-header">
+          <h2 class="iw-title">
+            {self.name}
+          </h2>
+        </div>
+        <div class="iw-content">
+          <div id="yelp-{self.yelpID}" class="yelp-info hidden">
+          </div>
+        </div>
+        <div class="iw-bottom-gradient">
+        </div>
+      </div>
+    `;
 
-// Make initial html for the given Place's info window.
-var makeInfoWindowHTML = function(place) {
-  var html = '<div class="iw-container"><div class="iw-header"><h2 class="iw-title">' +
-    place.name + '</h2></div><div class="iw-content"><div class="yelp-info hidden" id="yelp-' +
-    place.yelpID + '"></div></div><div class="iw-bottom-gradient"></div></div>'
-  return html;
-};
+    return html
+      .replace('{self.name}', self.name)
+      .replace('{self.yelpID}', self.yelpID);
+  };
 
-// Make an ajax request to the yelp business api
-var getYelpData = function(place) {
-  var YELP_URL = 'https://api.yelp.com/v2/business/';
-  var YELP_CONSUMER_KEY = 'GbivRhbPwg0gh-ti0WxOzw';
-  var YELP_CONSUMER_SECRET = 'Pd6KFyeX_hMAL2c5prD--cn--9Q';
-  var YELP_TOKEN = 'IUGGqvuWCnEZz4Fx12Fik9la9Wb17jgI';
-  var YELP_TOKEN_SECRET = 'XnxVSRkveoNhJp8jEjihFYo64h4';
+  // Make an ajax request to the yelp business api about this Place
+  self.requestYelpData = function() {
 
-  var parameters = {
-        oauth_consumer_key: YELP_CONSUMER_KEY,
-        oauth_token: YELP_TOKEN,
-        oauth_nonce: (Math.floor(Math.random() * 1e12).toString()),
-        oauth_signature_method: 'HMAC-SHA1',
-        oauth_timestamp: Math.floor(Date.now()/1000),
-        callback: 'cb'
-      };
+    var parameters = {
+          oauth_consumer_key: YELP_CONSUMER_KEY,
+          oauth_token: YELP_TOKEN,
+          oauth_nonce: (Math.floor(Math.random() * 1e12).toString()),
+          oauth_signature_method: 'HMAC-SHA1',
+          oauth_timestamp: Math.floor(Date.now()/1000),
+          callback: 'cb'
+        };
 
-  var url = YELP_URL + place.yelpID;
-  var signature = oauthSignature.generate('GET', url, parameters, YELP_CONSUMER_SECRET, YELP_TOKEN_SECRET);
-  parameters.oauth_signature = signature;
+    var url = YELP_URL + self.yelpID;
+    var signature = oauthSignature.generate('GET', url, parameters, YELP_CONSUMER_SECRET, YELP_TOKEN_SECRET);
+    parameters.oauth_signature = signature;
 
-  var settings = {
-    url: url,
-    data: parameters,
-    cache: true,
-    dataType: 'jsonp',
-    jsonpCallback: 'cb',
-    success: function(yelpData) {
-      console.dir(yelpData);
-      place.yelpDataReceived = true;
-      fillYelpInfoDiv(yelpData, place);
-    },
-    error: function(error) {
-      console.log(error);
+    var settings = {
+      url: url,
+      data: parameters,
+      cache: true,
+      dataType: 'jsonp',
+      jsonpCallback: 'cb',
+      success: function(yelpData) {
+        self.yelpDataReceived = true;
+        self.fillYelpInfoDiv(yelpData);
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    };
+
+    $.ajax(settings);
+  };
+
+  // Fill in the yelp-info div of the this Place's info window with data
+  // returned from a yelp business api request.
+  self.fillYelpInfoDiv = function(yelpData) {
+
+    // Select this Place's yelp-info div in the DOM
+    var $yelpInfoDiv = $('#yelp-' + self.yelpID);
+
+    // Make the html and append it to the yelp-info div
+    var $html = $(self.makeYelpHTML(yelpData));
+    $yelpInfoDiv.append($html);
+
+    // Once the main yelp image has loaded, fade in the yelp-info div
+    $html.find('.yelp-img').on('load', function() {
+      $yelpInfoDiv.fadeIn('slow', function() {
+        $yelpInfoDiv.removeClass('hidden')
+        // Save the current info window html into the InfoWindow object
+        self.marker.infowindow.content = $yelpInfoDiv.parent().prop('outerHTML');
+      })
+    });
+
+  };
+
+  // Given a JSON object of data returned from a yelp business API request,
+  // return the html that will be used in the info window's 'yelp-info' div.
+  self.makeYelpHTML = function(yelpData) {
+
+    // Create an html template that will be filled in with yelp the data.
+    var html = `
+      <div class="snippet-and-img-div">
+        <div class="yelp-snippet-div">
+          <p class="yelp-snippet">"{snippet_text}"</p>
+        </div>
+        <div class="yelp-img-div">
+          <img class="yelp-img" src="{image_url}" />
+        </div>
+      </div>
+      <table>
+        <tbody>
+          <tr>
+            <td><img class="yelp-rating-img" src="{rating_img_url}"></td>
+            <td class="open-or-closed {open_status_class}">{open_status_text}</td>
+          </tr>
+          <tr>
+            <td>{display_phone}</td>
+            <td><a href="{yelp_url}">View on Yelp</a></td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+
+    // Define an object containing the data that will be inserted into the html
+    var data = {
+      snippet_text: yelpData.snippet_text,
+      image_url: yelpData.image_url,
+      rating_img_url: yelpData.rating_img_url,
+      open_status_class: yelpData.is_closed ? 'is-closed' : 'is-open',
+      open_status_text: yelpData.is_closed ? "Closed Now" : "Open Now",
+      display_phone: yelpData.display_phone.substring(3),   // Remove country code
+      yelp_url: USER_ON_MOBILE ? yelpData.mobile_url : yelpData.url
+    };
+
+    // Loop over the `data` object and insert the data into the `html` template
+    for (var key in data) {
+      if (data.hasOwnProperty(key)) {
+        html = html.replace('{' + key + '}', data[key]);
+      }
+    }
+
+    return html
+  };
+
+  // Animate this Place's map marker to bounce one time.
+  self.animateMarkerBounce = function() {
+    if (self.marker.getAnimation() === null) {
+      self.marker.setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout(function() { self.marker.setAnimation(null) }, 775);
     }
   };
 
-  $.ajax(settings);
-};
-
-var yelpHTMLtemplate = `
-  <div class="snippet-and-img-div">
-    <div class="yelp-snippet-div">
-      <p class="yelp-snippet">"{0}"</p>
-    </div>
-    <div class="yelp-img-div">
-      <img class="yelp-img" src="{1}" />
-    </div>
-  </div>
-  <table>
-    <tbody>
-      <tr>
-        <td><img class="yelp-rating-img" src="{2}"></td>
-        <td class="open-or-closed is-{3}">{4}</td>
-      </tr>
-      <tr>
-        <td>{5}</td>
-        <td><a href="{6}">View on Yelp</a></td>
-      </tr>
-    </tbody>
-  </table>
-`;
-
-var makeYelpHTML = function(yelpData, place) {
-  var html = yelpHTMLtemplate;
-  var isOpenString = yelpData.is_closed ? "Closed Now" : "Open Now";
-  var yelpUrl = userOnMobileDevice ? yelpData.mobile_url : yelpData.url;
-
-  var args = [
-    yelpData.snippet_text,
-    yelpData.image_url,
-    yelpData.rating_img_url,
-    yelpData.is_closed ? 'closed' : 'open',
-    isOpenString,
-    yelpData.display_phone.substring(3),    // Remove country code from phone #
-    yelpUrl
-  ];
-  for (var i = 0; i < args.length; i++) {
-    html = html.replace('{' + i + '}', args[i]);
-  }
-  return html
-};
-
-// Fill in the yelp-info div of the given place's info window with data
-// returned from a yelp business api request.
-var fillYelpInfoDiv = function(yelpData, place) {
-  var $yelpInfoDiv = $('#yelp-' + place.yelpID);
-  var $html = $(makeYelpHTML(yelpData, place));
-  $yelpInfoDiv.append($html);
-  $html.find('.yelp-img').on('load', function() { $yelpInfoDiv.fadeIn('slow', function() {
-    $yelpInfoDiv.removeClass('hidden')
-    place.marker.infowindow.content = $yelpInfoDiv.parent().prop('outerHTML');
-  }) });
-};
-
-/* Map Marker Animations */ 
-
-var animateMarkerBounce = function(marker) {
-  if (marker.getAnimation() === null) {
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(function() { marker.setAnimation(null) }, 775);
-  }
 };
 
 
@@ -288,7 +323,7 @@ function AppViewModel() {
         map: self.map,
         animation: google.maps.Animation.DROP,
         infowindow: new google.maps.InfoWindow({
-          content: makeInfoWindowHTML(place),
+          content: place.makeInfoWindowHTML(),
           // Adjust the offset so that the info window tail ends on top of the marker
           pixelOffset: new google.maps.Size(-1, 20)
         })
@@ -388,7 +423,7 @@ function AppViewModel() {
   self.selectPlace = function(place) {
 
     // If the yelp data for this Place hasn't been retrieved, request it
-    if (!place.yelpDataReceived) { getYelpData(place) }
+    if (!place.yelpDataReceived) { place.requestYelpData() }
 
     // If another Place is currently selected, close its info window and set
     // the given Place as the selectedPlace
@@ -396,7 +431,7 @@ function AppViewModel() {
     self.selectedPlace(place);
 
     // Animate the given Place's map marker
-    animateMarkerBounce(place.marker);
+    place.animateMarkerBounce();
 
     // Open the given Place's map marker
     place.marker.infowindow.open(self.map, place.marker);
