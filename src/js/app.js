@@ -1,6 +1,6 @@
 "use strict";
 
-/* CONSTANTS */
+/* =============== CONSTANTS =============== */
 
 var MAP_CENTER = {lat:34.027, lng: -118.401}
 
@@ -15,9 +15,9 @@ var YELP_TOKEN_SECRET = 'XnxVSRkveoNhJp8jEjihFYo64h4';
 var USER_ON_MOBILE = mobileCheck();
 
 
-/* GENERAL FUNCTIONS */
+/* =============== GENERAL FUNCTIONS =============== */
 
-// Return true if the first string is a substring of the second string.
+// Check if the first string is a substring of the second.
 var isSubstring = function(substring, string) {
   return string.toLowerCase().indexOf(substring.toLowerCase()) > -1;
 }
@@ -31,7 +31,8 @@ function mobileCheck() {
 };
 
 
-/* Raw data for the places that display on the map by default */
+/* =============== RAW DATA FOR DEFAULT PLACES =============== */
+
 var placesData = [
   {
     name: 'Versailles',
@@ -92,10 +93,32 @@ var placesData = [
 ];
 
 
-/* Constructor for Place objects */
+/* =============== SEARCH MENU SHOW/HIDE ANIMATIONS =============== */
+
+// When the hamburger icon is clicked, slide in the search menu
+$('#hamburger-btn').click(function() {
+  $('#search-menu').addClass('open');
+});
+
+// When the map is clicked, hide the search menu
+$('#map').click(function(e) {
+
+  // If the click is on an info window close button, don't hide the search menu
+  if (e.target.tagName === 'IMG') { return }
+
+  $('#search-menu').removeClass('open');    // Hide search menu
+
+  // Remove focus from the input when hiding the menu.  This prevents mobile
+  // device keyboards from constantly reappearing when the menu is closed.
+  $('#search-menu input').blur();
+});
+
+
+/* =============== PLACE OBJECT CONSTRUCTOR =============== */
 var Place = function(placeData, map) {
   var self = this;
 
+  /* ATTRIBUTES */
   self.name = placeData.name;
   self.yelpID = placeData.yelpID;
   self.location = placeData.location;
@@ -103,18 +126,20 @@ var Place = function(placeData, map) {
   self.address = placeData.address;
   self.yelpDataRecieved = false;
 
-  // Return the address, formatted for the search list
+
+  /* METHODS */
+
+  // Return the full address, with the street and city separated by a comma
   self.getAddress = function() {
     return self.address.street + ', ' + self.address.city;
   }
 
-  // Return the initial html for the info window.
+  // Make and return the initial html for the info window
   self.makeInfoWindowHTML = function() {
-
     // 'sk-fading-circle' spinner code found at:
     // http://tobiasahlin.com/spinkit/
     var html = `
-      <div class="iw-container">
+      <div id="iw-{self.yelpID}" class="iw-container">
         <div class="iw-header">
           <h2 class="iw-title">
             {self.name}
@@ -135,7 +160,7 @@ var Place = function(placeData, map) {
             <div class="sk-circle11 sk-circle"></div>
             <div class="sk-circle12 sk-circle"></div>
           </div>
-          <div id="yelp-{self.yelpID}" class="yelp-info hidden">
+          <div class="yelp-info hidden">
           </div>
         </div>
         <div class="iw-bottom-gradient">
@@ -144,8 +169,8 @@ var Place = function(placeData, map) {
     `;
 
     return html
-      .replace('{self.name}', self.name)
-      .replace('{self.yelpID}', self.yelpID);
+      .replace('{self.yelpID}', self.yelpID)
+      .replace('{self.name}', self.name);
   };
 
   // Make an ajax request to the yelp business api about this Place
@@ -161,7 +186,9 @@ var Place = function(placeData, map) {
         };
 
     var url = YELP_URL + self.yelpID;
-    var signature = oauthSignature.generate('GET', url, parameters, YELP_CONSUMER_SECRET, YELP_TOKEN_SECRET);
+    var signature = oauthSignature.generate('GET', url, parameters,
+        YELP_CONSUMER_SECRET, YELP_TOKEN_SECRET);
+
     parameters.oauth_signature = signature;
 
     var settings = {
@@ -183,19 +210,11 @@ var Place = function(placeData, map) {
     $.ajax(settings);
   };
 
-  self.fadeOutSpinnerDiv = function(speed) {
-    var $spinnerDiv = $('.sk-fading-circle');
-    $spinnerDiv.fadeOut(speed, function() {
-      $spinnerDiv.addClass('hidden');
-    });
-  };
-
   // Fill in the yelp-info div of the this Place's info window with data
   // returned from a yelp business api request.
   self.fillYelpInfoDiv = function(yelpData) {
-
     // Select this Place's yelp-info div in the DOM
-    var $yelpInfoDiv = $('#yelp-' + self.yelpID);
+    var $yelpInfoDiv = $('#iw-' + self.yelpID + ' .yelp-info');
 
     // Make the html and append it to the yelp-info div
     var $html = $(self.makeYelpHTML(yelpData));
@@ -203,7 +222,7 @@ var Place = function(placeData, map) {
 
     // Once the main yelp image has loaded, fade in the yelp-info div
     $html.find('.yelp-img').on('load', function() {
-      self.fadeOutSpinnerDiv(300);
+      self.fadeOutSpinner(300);
       $yelpInfoDiv.delay(400).fadeIn('slow', function() {
         $yelpInfoDiv.removeClass('hidden')
         // Save the current info window html into the InfoWindow object
@@ -213,9 +232,11 @@ var Place = function(placeData, map) {
 
   };
 
+  // Fill in the yelp-info div of the this Place's info window with an error
+  // message.
   self.fillYelpInfoDivErr = function(error) {
     // Select this Place's yelp-info div in the DOM
-    var $yelpInfoDiv = $('#yelp-' + self.yelpID);
+    var $yelpInfoDiv = $('#iw-' + self.yelpID + ' .yelp-info');
 
     var html = `
       <div class="yelp-error">
@@ -227,7 +248,7 @@ var Place = function(placeData, map) {
     `;
 
     $yelpInfoDiv.append(html);
-    self.fadeOutSpinnerDiv(300);
+    self.fadeOutSpinner(300);
     $yelpInfoDiv.delay(400).fadeIn('slow', function() {$yelpInfoDiv.removeClass('hidden') });
   };
 
@@ -259,13 +280,16 @@ var Place = function(placeData, map) {
       </table>
     `;
 
-    // Define an object containing the data that will be inserted into the html
+    // Remove country code from phone number
+    var phoneNumber = yelpData.display_phone.substring(3);
+
+    // An object containing the data that will be inserted into the html
     var data = {
       snippet_text: yelpData.snippet_text,
       image_url: yelpData.image_url,
       rating_img_url: yelpData.rating_img_url,
       review_count: yelpData.review_count,
-      display_phone: yelpData.display_phone.substring(3),   // Remove country code
+      display_phone: phoneNumber,
       yelp_url: USER_ON_MOBILE ? yelpData.mobile_url : yelpData.url
     };
 
@@ -279,6 +303,14 @@ var Place = function(placeData, map) {
     return html
   };
 
+  // Fade out the spinner that is inside this Place's InfoWindow
+  self.fadeOutSpinner = function(speed) {
+    var $spinnerDiv = $('#iw-' + self.yelpID + ' .sk-fading-circle');
+    $spinnerDiv.fadeOut(speed, function() {
+      $spinnerDiv.addClass('hidden');
+    });
+  };
+
   // Animate this Place's map marker to bounce one time.
   self.animateMarkerBounce = function() {
     if (self.marker.getAnimation() === null) {
@@ -290,30 +322,7 @@ var Place = function(placeData, map) {
 };
 
 
-/* Setup Search Menu Slide Animations */
-
-// When the hamburger icon is clicked, slide in the search menu
-$('#hamburger-btn').click(function() {
-  $('#search-menu').addClass('open');
-});
-
-// When the map is clicked, hide the search menu
-$('#map').click(function(e) {
-
-  // If the click is on an info window close button, don't hide the search menu
-  if (e.target.tagName === 'IMG') { return }
-
-  $('#search-menu').removeClass('open');    // Hide search menu
-
-  // Remove focus from the input when hiding the menu.
-  // This prevents the keyboard from constantly reappearing while the menu is
-  // closed.
-  $('#search-menu input').blur();
-});
-
-
-
-/* App ViewModel */
+/* =============== APP VIEWMODEL =============== */
 function AppViewModel() {
   var self = this;
   self.map = null;
@@ -539,6 +548,7 @@ function AppViewModel() {
   };
 }
 
-/* Kickoff the app */
+
+// Kickoff the app
 var app = { vm: new AppViewModel() };
 ko.applyBindings(app.vm);
