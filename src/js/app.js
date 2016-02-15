@@ -209,8 +209,8 @@ var Place = function(placeData, map) {
       $yelpInfoDiv.delay(400).fadeIn('slow', function() {
         $yelpInfoDiv.removeClass('hidden')
         // Save the current info window html into the InfoWindow object
-        self.marker.infowindow.content = $yelpInfoDiv.parent().prop('outerHTML');
-      })
+        //self.marker.infowindow.content = $yelpInfoDiv.parent().prop('outerHTML');
+      });
     });
 
   };
@@ -379,11 +379,23 @@ function AppViewModel() {
           // Adjust the offset so that the info window tail ends on top of the marker
           pixelOffset: new google.maps.Size(-1, 20)
         })
+
       });
+
+      // Save the original info window content for recall later
+      // We will want to reset the info window content if an ajax
+      // request fails, so that the next time the info window is opened,
+      // the spinner appears and the behavior is correct.
+      place.marker.infowindow.original_content = place.marker.infowindow.content;
 
       // Add event listeners to markers and info windows
       place.marker.addListener('click', function() { self.selectPlace(place) });
-      place.marker.infowindow.addListener('closeclick', function() { self.deselectPlace(place) });
+      place.marker.infowindow.addListener('closeclick', function() {
+        self.deselectPlace(place)
+        if (!place.yelpDataReceived) {
+          place.marker.infowindow.setContent(place.marker.infowindow.original_content);
+        }
+      });
 
       // Change the default styles for info windows.
       // Code from: http://en.marnoto.com/2014/09/5-formas-de-personalizar-infowindow.html
