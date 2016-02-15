@@ -359,6 +359,15 @@ function AppViewModel() {
       disableDefaultUI: true
     });
 
+    // Remove google 'point of interest' elements from map
+    self.map.setOptions({
+      styles: [{
+        "featureType": "poi",
+        "elementType": "labels",
+        "stylers": [{"visibility": "off"}]
+      }]
+    });
+
     // Get all the Place objects
     var places = self.allPlaces();
 
