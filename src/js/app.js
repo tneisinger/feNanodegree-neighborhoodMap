@@ -159,7 +159,8 @@ var Place = function(placeData, map) {
         self.fillYelpInfoDiv(yelpData);
       },
       error: function(error) {
-        console.log(error);
+        console.log('Yelp Business API ajax request error:', error);
+        self.fillYelpInfoDivErr(error);
       }
     };
 
@@ -186,6 +187,23 @@ var Place = function(placeData, map) {
       })
     });
 
+  };
+
+  self.fillYelpInfoDivErr = function(error) {
+    // Select this Place's yelp-info div in the DOM
+    var $yelpInfoDiv = $('#yelp-' + self.yelpID);
+
+    var html = `
+      <div class="yelp-error">
+          <p class="yelp-error-emoticon">: (</p>
+          <p class="yelp-error-message">
+            Unable to retrieve Yelp data. Please try again later.
+          </p>
+      </div>
+    `;
+
+    $yelpInfoDiv.append(html);
+    $yelpInfoDiv.fadeIn('slow', function() {$yelpInfoDiv.removeClass('hidden') });
   };
 
   // Given a JSON object of data returned from a yelp business API request,
