@@ -1,4 +1,5 @@
-/* General */
+/* =============== General =============== */
+
 html, body {
     height: 100%;
     width: 100%;
@@ -19,15 +20,22 @@ p {
     display: none;
 }
 
+// Remove scrollbars from scrollable elements
+::-webkit-scrollbar {
+    display: none;
+}
 
-/* Google Maps */
+
+/* =============== Google Maps =============== */
+
 #map {
     height: 100%;
     width: 100%;
 }
 
 
-/* Hamburger Button */
+/* =============== Hamburger Button =============== */
+
 #hamburger-btn {
     position: absolute;
     top: 10px;
@@ -46,12 +54,10 @@ p {
 }
 
 
-/* Show All Button */
+/* =============== Show-All Button =============== */
 
 #show-all-btn {
     position: absolute;
-    /*top: 15px;*/
-    /*left: 70px;*/
     top: 60px;
     left: 10px;
     z-index: 1;
@@ -80,7 +86,8 @@ p {
     vertical-align: middle;
 }
 
-/* Search Menu */
+/* =============== Search Menu =============== */
+
 #search-menu {
     height: 100%;
     position: absolute;
@@ -141,11 +148,7 @@ li + li {
     border-top: 1px solid #ccc;
 }
 
-/*li:nth-child(odd) {*/
-    /*background: #e5f2ff;*/
-    /*background: #ffffe5;*/
-/*}*/
-
+/* Styles for the gray map marker image that appears next to each item in the search list */
 .map-marker-img {
     display: inline-block;
     width: 20px;
@@ -174,10 +177,11 @@ li + li {
 }
 
 
-/* Info Window */
+/* =============== Map Marker Info Windows =============== */
 
 /* This class applies to divs which the google maps api generates
- * automatically. They contain info window content. */
+ * automatically. All info windows are decendants of a div
+ * of this class */
 .gm-style-iw {
     width: 280px !important;
     height: 195px !important;
@@ -186,14 +190,15 @@ li + li {
     border-radius: 10px;
     background-color: white;
     border: 1px solid #48b5e9;
-
     /* The parent divs of all '.gm-style-iw' divs are a bit wider and taller
      * than the visible part of the info windows on mobile, and were blocking
-     * clicks or touches onto the underlying map.  To fix this, app.js sets the
-     * parents of this class to 'pointer-events: none'.  But that change gets
-     * propagated down to all children.  In order for the info windows to be
-     * clickable, the 'pointer-events' attribute for this div class must be
-     * reset to 'auto'. */
+     * clicks or touches onto the underlying map near the edges of the info
+     * windows.  To fix this, app.js sets the parents of this class to
+     * 'pointer-events: none'.  This allows clicks and touches to pass through
+     * the parent div.  However, that change gets propagated down to all
+     * children, making them unclickable as well.  In order for the info
+     * windows to be clickable, the 'pointer-events' attribute for this div
+     * class must be reset to 'auto'.  */
     pointer-events: auto;
 }
 
@@ -232,14 +237,95 @@ iw-content a:hover {
     text-decoration: underline;
 }
 
-::-webkit-scrollbar {
-    display: none;
-}
-
 .yelp-info {
     width: 100%;
     height: 100%;
 }
+
+/* Use flexbox to ensure that the shorter of the yelp image and the snippet-text
+ * is vertically centered in the space created by the height of the taller
+ * element.  */
+.snippet-and-img-div {
+    display: flex;
+    display: -webkit-flex;
+    margin-bottom: 15px;
+}
+
+.yelp-snippet-div {
+    display: flex;
+    display: -webkit-flex;
+    font-style: italic;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.yelp-img-div {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.yelp-img {
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.yelp-info table {
+    margin: 0 auto 5px auto;
+    font-size: 1.25em;
+}
+
+.yelp-info td {
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+.yelp-info td + td {
+    padding-left: 30px;
+}
+
+.yelp-rating-img {
+    vertical-align: middle;
+}
+
+.yelp-error {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    margin: -15px 0;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.yelp-error p {
+    color: red;
+    font-weight: bold;
+}
+
+.yelp-error-emoticon {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.iw-bottom-gradient {
+    pointer-events: none;
+    position: absolute;
+    width: 280px;
+    height: 40px;
+    bottom: 0px;
+    border-radius: 0 0 10px 10px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    background: -webkit-linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    background: -moz-linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    background: -ms-linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
+
+/* =============== Loading Spinner =============== */
 
 /* sk-fading-circle spinner code found at:
  * http://tobiasahlin.com/spinkit/ */
@@ -379,89 +465,12 @@ iw-content a:hover {
   40% { opacity: 1; } 
 }
 
-.snippet-and-img-div {
-    display: flex;
-    display: -webkit-flex;
-    margin-bottom: 15px;
-}
 
-.yelp-snippet-div {
-    display: flex;
-    display: -webkit-flex;
-    font-style: italic;
-    flex-direction: column;
-    justify-content: center;
-}
+/* =============== Media Queries =============== */
 
-.yelp-img-div {
-    display: flex;
-    display: -webkit-flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.yelp-img {
-    border-radius: 5px;
-    margin-left: 10px;
-}
-
-.yelp-info table {
-    margin: 0 auto 5px auto;
-    font-size: 1.25em;
-}
-
-.yelp-info td {
-    text-align: center;
-    padding-bottom: 15px;
-}
-
-.yelp-info td + td {
-    padding-left: 30px;
-}
-
-.yelp-rating-img {
-    vertical-align: middle;
-}
-
-.yelp-error {
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    margin: -15px 0;
-    display: flex;
-    display: -webkit-flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.yelp-error p {
-    color: red;
-    font-weight: bold;
-}
-
-.yelp-error-emoticon {
-    font-size: 2em;
-    margin-bottom: 20px;
-}
-
-.iw-bottom-gradient {
-    pointer-events: none;
-    position: absolute;
-    width: 280px;
-    height: 40px;
-    bottom: 0px;
-    border-radius: 0 0 10px 10px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
-    background: -webkit-linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
-    background: -moz-linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
-    background: -ms-linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
-}
-
-
-/* Media Queries */
 @media screen and (min-width: 800px) {
     #search-menu {
         width: 350px;
         transform: translate(-360px);
 }
+
