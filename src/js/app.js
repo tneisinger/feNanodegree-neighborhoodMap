@@ -251,7 +251,7 @@ var Place = function(placeData, map) {
 /* Setup Search Menu Slide Animations */
 
 // When the hamburger icon is clicked, slide in the search menu
-$('#hamburger-button').click(function() {
+$('#hamburger-btn').click(function() {
   $('#search-menu').addClass('open');
 });
 

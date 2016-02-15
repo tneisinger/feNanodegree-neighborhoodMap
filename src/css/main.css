@@ -28,7 +28,7 @@ p {
 
 
 /* Hamburger Button */
-#hamburger-button {
+#hamburger-btn {
     position: absolute;
     top: 10px;
     left: 10px;
@@ -40,7 +40,7 @@ p {
     opacity: 0.75;
 }
 
-#hamburger-button img {
+#hamburger-btn img {
     margin: 5px 8px 0px 8px;
     width: 30px;
 }
