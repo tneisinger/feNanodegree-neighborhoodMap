@@ -155,6 +155,7 @@ var Place = function(placeData, map) {
       dataType: 'jsonp',
       jsonpCallback: 'cb',
       success: function(yelpData) {
+        console.dir(yelpData);
         self.yelpDataReceived = true;
         self.fillYelpInfoDiv(yelpData);
       },
@@ -224,7 +225,7 @@ var Place = function(placeData, map) {
         <tbody>
           <tr>
             <td><img class="yelp-rating-img" src="{rating_img_url}"></td>
-            <td class="open-or-closed {open_status_class}">{open_status_text}</td>
+            <td class="review-count">{review_count} Reviews</td>
           </tr>
           <tr>
             <td>{display_phone}</td>
@@ -239,8 +240,7 @@ var Place = function(placeData, map) {
       snippet_text: yelpData.snippet_text,
       image_url: yelpData.image_url,
       rating_img_url: yelpData.rating_img_url,
-      open_status_class: yelpData.is_closed ? 'is-closed' : 'is-open',
-      open_status_text: yelpData.is_closed ? "Closed Now" : "Open Now",
+      review_count: yelpData.review_count,
       display_phone: yelpData.display_phone.substring(3),   // Remove country code
       yelp_url: USER_ON_MOBILE ? yelpData.mobile_url : yelpData.url
     };

@@ -275,18 +275,6 @@ div.snippet-and-img-div {
     vertical-align: middle;
 }
 
-.open-or-closed {
-    font-weight: bold;
-}
-
-.is-closed {
-    color: red;
-}
-
-.is-open {
-    color: green;
-}
-
 .yelp-error {
     width: 100%;
     height: 100%;
