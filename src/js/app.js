@@ -111,6 +111,8 @@ var Place = function(placeData, map) {
   // Return the initial html for the info window.
   self.makeInfoWindowHTML = function() {
 
+    // 'sk-fading-circle' spinner code found at:
+    // http://tobiasahlin.com/spinkit/
     var html = `
       <div class="iw-container">
         <div class="iw-header">
@@ -119,6 +121,20 @@ var Place = function(placeData, map) {
           </h2>
         </div>
         <div class="iw-content">
+          <div class="sk-fading-circle">
+            <div class="sk-circle1 sk-circle"></div>
+            <div class="sk-circle2 sk-circle"></div>
+            <div class="sk-circle3 sk-circle"></div>
+            <div class="sk-circle4 sk-circle"></div>
+            <div class="sk-circle5 sk-circle"></div>
+            <div class="sk-circle6 sk-circle"></div>
+            <div class="sk-circle7 sk-circle"></div>
+            <div class="sk-circle8 sk-circle"></div>
+            <div class="sk-circle9 sk-circle"></div>
+            <div class="sk-circle10 sk-circle"></div>
+            <div class="sk-circle11 sk-circle"></div>
+            <div class="sk-circle12 sk-circle"></div>
+          </div>
           <div id="yelp-{self.yelpID}" class="yelp-info hidden">
           </div>
         </div>
@@ -168,6 +184,14 @@ var Place = function(placeData, map) {
     $.ajax(settings);
   };
 
+  self.fadeOutSpinnerDiv = function(speed) {
+    var $spinnerDiv = $('.sk-fading-circle');
+    $spinnerDiv.fadeOut(speed, function() {
+      $spinnerDiv.addClass('hidden');
+    });
+    console.dir($spinnerDiv.html());
+  };
+
   // Fill in the yelp-info div of the this Place's info window with data
   // returned from a yelp business api request.
   self.fillYelpInfoDiv = function(yelpData) {
@@ -181,7 +205,8 @@ var Place = function(placeData, map) {
 
     // Once the main yelp image has loaded, fade in the yelp-info div
     $html.find('.yelp-img').on('load', function() {
-      $yelpInfoDiv.fadeIn('slow', function() {
+      self.fadeOutSpinnerDiv(300);
+      $yelpInfoDiv.delay(400).fadeIn('slow', function() {
         $yelpInfoDiv.removeClass('hidden')
         // Save the current info window html into the InfoWindow object
         self.marker.infowindow.content = $yelpInfoDiv.parent().prop('outerHTML');
@@ -204,7 +229,8 @@ var Place = function(placeData, map) {
     `;
 
     $yelpInfoDiv.append(html);
-    $yelpInfoDiv.fadeIn('slow', function() {$yelpInfoDiv.removeClass('hidden') });
+    self.fadeOutSpinnerDiv(300);
+    $yelpInfoDiv.delay(400).fadeIn('slow', function() {$yelpInfoDiv.removeClass('hidden') });
   };
 
   // Given a JSON object of data returned from a yelp business API request,
