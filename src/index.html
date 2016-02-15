@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,17 +8,22 @@
     <title>Neighborhood Map</title>
     <link rel="stylesheet" href="../node_modules/normalize.css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
-    <!-- TODO: Don't leave this commented out.  Use it or don't. -->
-    <!--<link rel="stylesheet" media="screen and (min-width:500px)" href="over500px.css">-->
   </head>
+
   <body>
+
+    <!-- Hamburger Button -->
     <div id="hamburger-btn">
       <img src="img/hamburger-icon.svg" alt="menu">
     </div>
+
+    <!--Show All Button-->
     <div data-bind="css: {hidden: $root.searchString() === ''}" id="show-all-btn" class="hidden">
       <span>Show All</span>
       <img class="map-marker-img" src="img/map-marker.svg" alt="map marker logo">
     </div>
+
+    <!--Search List Menu-->
     <aside id="search-menu">
       <input placeholder="Search" data-bind="textInput: searchString, event: {keyup: onSearchChange}" />
       <span id="clear-search-btn" data-bind="click: $root.clearSearchString, css: { hidden: $root.searchString() === ''}">x</span>
@@ -34,7 +40,11 @@
       </div>
       <div id="list-bottom-gradient"></div>
     </aside>
+
+    <!--Google Map-->
     <div id="map"></div>
+
+    <!--Javascript files-->
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/oauth-signature/dist/oauth-signature.js"></script>
     <script src="../node_modules/knockout/build/output/knockout-latest.js"></script>

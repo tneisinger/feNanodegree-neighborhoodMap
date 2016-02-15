@@ -171,7 +171,6 @@ var Place = function(placeData, map) {
       dataType: 'jsonp',
       jsonpCallback: 'cb',
       success: function(yelpData) {
-        console.dir(yelpData);
         self.yelpDataReceived = true;
         self.fillYelpInfoDiv(yelpData);
       },
@@ -189,7 +188,6 @@ var Place = function(placeData, map) {
     $spinnerDiv.fadeOut(speed, function() {
       $spinnerDiv.addClass('hidden');
     });
-    console.dir($spinnerDiv.html());
   };
 
   // Fill in the yelp-info div of the this Place's info window with data
