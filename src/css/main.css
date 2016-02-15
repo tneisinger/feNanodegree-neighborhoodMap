@@ -20,7 +20,7 @@ p {
     display: none;
 }
 
-// Remove scrollbars from scrollable elements
+/* Remove scrollbars from scrollable elements */
 ::-webkit-scrollbar {
     display: none;
 }
