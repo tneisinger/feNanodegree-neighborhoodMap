@@ -282,7 +282,15 @@ function AppViewModel() {
   // selectedPlace is the Place Object that has been selected by the user.
   self.selectedPlace = ko.observable(null);
 
-  // Array of all Place objects.
+  // Sort the placesData alphabetically by name
+  placesData.sort(function(a, b) {
+    if (a.name < b.name) return -1;
+    if (a.name > b.name) return 1;
+    return 0;
+  });
+
+  // Convert each object in placesData to a Place object and store all of them
+  // in an observable array.
   self.allPlaces = ko.observableArray(placesData.map(function(data) {return new Place(data)}));
 
   // Array of all the Place objects whose map markers are visible on the map
