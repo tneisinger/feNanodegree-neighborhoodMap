@@ -217,16 +217,14 @@ var Place = function(placeData, map) {
     var $yelpInfoDiv = $('#iw-' + self.yelpID + ' .yelp-info');
 
     // Make the html and append it to the yelp-info div
-    var $html = $(self.makeYelpHTML(yelpData));
-    $yelpInfoDiv.append($html);
+    var html = self.makeYelpHTML(yelpData);
+    $yelpInfoDiv.append(html);
 
     // Once the main yelp image has loaded, fade in the yelp-info div
-    $html.find('.yelp-img').on('load', function() {
+    $(html).find('.yelp-img').on('load', function() {
       self.fadeOutSpinner(300);
       $yelpInfoDiv.delay(400).fadeIn('slow', function() {
         $yelpInfoDiv.removeClass('hidden')
-        // Save the current info window html into the InfoWindow object
-        //self.marker.infowindow.content = $yelpInfoDiv.parent().prop('outerHTML');
       });
     });
 
