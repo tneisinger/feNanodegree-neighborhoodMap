@@ -93,7 +93,7 @@ var placesData = [
 ];
 
 
-/* =============== SEARCH MENU SHOW/HIDE ANIMATIONS =============== */
+/* =============== GENERAL MENU ANIMATIONS =============== */
 
 // When the hamburger icon is clicked, slide in the search menu
 $('#hamburger-btn').click(function() {
@@ -111,6 +111,13 @@ $('#map').click(function(e) {
   // Remove focus from the input when hiding the menu.  This prevents mobile
   // device keyboards from constantly reappearing when the menu is closed.
   $('#search-menu input').blur();
+});
+
+
+// When the 'show all' button is clicked, clear the search input.
+// Clearing the search input will automatically reveal all the markers
+$('#show-all-btn').click(function() {
+  app.vm.clearSearchString();
 });
 
 
@@ -323,12 +330,16 @@ var Place = function(placeData, map) {
 /* =============== APP VIEWMODEL =============== */
 function AppViewModel() {
   var self = this;
+
+  // For now, set the map to null.  The real map will be assigned when the
+  // initMap callback is called by the Google Maps api.
   self.map = null;
 
   // searchSring is the value inside the input element at the top of the search-menu
   self.searchString = ko.observable('');
 
-  // selectedPlace is the Place Object that has been selected by the user.
+  // selectedPlace is the Place Object that has been selected by the user.  The
+  // selectedPlace will have its InfoWindow open above its marker.
   self.selectedPlace = ko.observable(null);
 
   // Sort the placesData alphabetically by name
@@ -342,18 +353,11 @@ function AppViewModel() {
   // in an observable array.
   self.allPlaces = ko.observableArray(placesData.map(function(data) {return new Place(data)}));
 
-  // Array of all the Place objects whose map markers are visible on the map
+  // A ko.computed Array of all the Place objects whose map markers are visible on the map
   self.visiblePlaces = ko.computed(function() {
     return ko.utils.arrayFilter(self.allPlaces(), function(place) {
       return place.marker.map === self.map;
     });
-  });
-
-
-  // When the 'show all' button is clicked, clear the search input.
-  // Clearing the search input will automatically reveal all the markers
-  $('#show-all-btn').click(function() {
-    self.clearSearchString();
   });
 
   // This method is the callback for the google maps api script
