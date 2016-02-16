@@ -13,20 +13,20 @@
   <body>
 
     <!-- Hamburger Button -->
-    <div id="hamburger-btn">
+    <div id="hamburger-btn" data-bind="click: openSearchMenu">
       <img src="img/hamburger-icon.svg" alt="menu">
     </div>
 
-    <!--Show All Button-->
-    <div data-bind="css: {hidden: $root.searchString() === ''}" id="show-all-btn" class="hidden">
+    <!--Show-All Button-->
+    <div id="show-all-btn" class="hidden" data-bind="click: clearSearchString, css: {hidden: searchString() === ''}">
       <span>Show All</span>
       <img class="map-marker-img" src="img/map-marker.svg" alt="map marker logo">
     </div>
 
     <!--Search List Menu-->
-    <aside id="search-menu">
+    <aside id="search-menu" data-bind="css: {open: isSearchMenuOpen()}">
       <input placeholder="Search" data-bind="textInput: searchString, event: {keyup: onSearchChange}" />
-      <span id="clear-search-btn" data-bind="click: $root.clearSearchString, css: { hidden: $root.searchString() === ''}">x</span>
+      <span id="clear-search-btn" data-bind="click: clearSearchString, css: { hidden: searchString() === ''}">x</span>
       <div id="list-div">
         <ul data-bind="foreach: visiblePlaces">
           <li data-bind="click: $root.selectPlace, css: { selected: $root.selectedPlace() === $data }">

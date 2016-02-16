@@ -93,34 +93,6 @@ var placesData = [
 ];
 
 
-/* =============== GENERAL MENU ANIMATIONS =============== */
-
-// When the hamburger icon is clicked, slide in the search menu
-$('#hamburger-btn').click(function() {
-  $('#search-menu').addClass('open');
-});
-
-// When the map is clicked, hide the search menu
-$('#map').click(function(e) {
-
-  // If the click is on an info window close button, don't hide the search menu
-  if (e.target.tagName === 'IMG') { return }
-
-  $('#search-menu').removeClass('open');    // Hide search menu
-
-  // Remove focus from the input when hiding the menu.  This prevents mobile
-  // device keyboards from constantly reappearing when the menu is closed.
-  $('#search-menu input').blur();
-});
-
-
-// When the 'show all' button is clicked, clear the search input.
-// Clearing the search input will automatically reveal all the markers
-$('#show-all-btn').click(function() {
-  app.vm.clearSearchString();
-});
-
-
 /* =============== PLACE OBJECT CONSTRUCTOR =============== */
 var Place = function(placeData, map) {
   var self = this;
@@ -335,6 +307,8 @@ function AppViewModel() {
   // initMap callback is called by the Google Maps api.
   self.map = null;
 
+  self.isSearchMenuOpen = ko.observable(false);
+
   // searchSring is the value inside the input element at the top of the search-menu
   self.searchString = ko.observable('');
 
@@ -487,8 +461,23 @@ function AppViewModel() {
     // TODO: When the map is finished loading, do something
     google.maps.event.addListenerOnce(self.map, 'idle', function() {
       console.log('map is done loading!');
-      //$('#map').focus();
     });
+    
+    // If the map is clicked while the seach menu is open, close the menu
+    self.map.addListener('click', function() {
+      if (self.isSearchMenuOpen()) {
+        self.closeSearchMenu();
+      }
+    });
+  }
+
+  self.openSearchMenu = function() {
+    self.isSearchMenuOpen(true);
+  };
+
+  self.closeSearchMenu = function() {
+    self.isSearchMenuOpen(false);
+    $('#search-menu input').blur();
   }
 
   // When the user changes the searchString, map over allPlaces.
