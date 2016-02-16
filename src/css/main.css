@@ -468,9 +468,20 @@ iw-content a:hover {
 
 /* =============== Media Queries =============== */
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 1000px) {
     #search-menu {
         width: 350px;
-        transform: translate(-360px);
+        transform: translate(0px);
+    }
+
+    #list-bottom-gradient {
+        width: 350px;
+    }
+
+    #map {
+        position: absolute;
+        left: 350px;
+        width: calc(100% - 350px);
+    }
 }
 
