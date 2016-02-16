@@ -4,6 +4,10 @@
 
 var MAP_CENTER = {lat:34.027, lng: -118.401}
 
+var MAP_ZOOM_LEVEL = selectZoomLevel();
+console.log('window width:', window.innerWidth);
+console.log('zoom level:', MAP_ZOOM_LEVEL);
+
 // Yelp API constants
 var YELP_URL = 'https://api.yelp.com/v2/business/';
 var YELP_CONSUMER_KEY = 'GbivRhbPwg0gh-ti0WxOzw';
@@ -20,6 +24,14 @@ var USER_ON_MOBILE = mobileCheck();
 // Check if the first string is a substring of the second.
 var isSubstring = function(substring, string) {
   return string.toLowerCase().indexOf(substring.toLowerCase()) > -1;
+}
+
+// Return the appropriate map zoom level based on the screen width
+function selectZoomLevel() {
+  //if (window.innerWidth < 1000) { return 13 }
+  if (window.innerWidth < 600) { return 13 }
+  if (window.innerWidth < 1500) { return 14 }
+  return 15
 }
 
 // Return true if the user is on a mobile device.
@@ -341,7 +353,7 @@ function AppViewModel() {
     // Create the map
     self.map = new google.maps.Map(document.getElementById('map'), {
       center: MAP_CENTER,
-      zoom: 13,
+      zoom: MAP_ZOOM_LEVEL,
       disableDefaultUI: true
     });
 
