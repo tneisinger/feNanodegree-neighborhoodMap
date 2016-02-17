@@ -13,14 +13,17 @@ is saved in the dist/ directory.
 
 ## Setup
 
-To install and run this project on your local machine, clone this repo and
-run `npm install` in the repo's root directory. After npm has installed all the
-dependencies, open the dist/index.html file in your favorite web browser.
+To install this project on your local machine, clone this repo and cd into its
+root directory.  Then Run `npm install` to download the project dependencies.
+Once the dependencies have been installed, simply open the dist/index.html file
+in your favorite web browser.
 
 All source code for this project is located in the src/ directory.  This
-project uses grunt to minify source code and place it into the dist/ directory.
-If you wish to modify the source code, it is recommended that you use grunt to
-re-minify the source code and save it into the dist/ directory.
+project uses grunt to minify the source code and place it in the dist/
+directory.  If you wish to modify the source code, it is recommended that you
+use grunt to re-minify the code and save it into the dist/ directory.  After
+you have finished making your changes to the source code, simply run `grunt` in
+the root of the repository to update the dist/ directory with your changes.
 
 ## Attributions
 
