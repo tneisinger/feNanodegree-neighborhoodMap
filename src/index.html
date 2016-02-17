@@ -32,7 +32,7 @@
           <li data-bind="click: $root.selectPlace, css: { selected: $root.selectedPlace() === $data }">
             <img class="map-marker-img" src="img/map-marker.svg" alt="map marker logo">
             <div class="list-place-info">
-              <p data-bind="text: name"></p>
+              <p class="list-place-name" data-bind="text: name"></p>
               <p class="list-place-address" data-bind="text: getAddress()"></p>
             </div>
           </li>

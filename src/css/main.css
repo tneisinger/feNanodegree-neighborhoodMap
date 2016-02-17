@@ -487,5 +487,20 @@ iw-content a:hover {
         left: 350px;
         width: calc(100% - 350px);
     }
+
+    .map-marker-img {
+        display: inline-block;
+        width: 25px;
+        margin: 0 5px 5px 0;
+    }
+
+    .list-place-name {
+        font-size: 1.25em;
+    }
+
+    .list-place-address {
+        font-size: 0.75em;
+        margin-top: 5px;
+    }
 }
 
