@@ -1,8 +1,8 @@
-"use strict";
+/*jshint esversion: 6 */
 
 /* =============== CONSTANTS =============== */
 
-var MAP_CENTER = {lat:34.027, lng: -118.401}
+var MAP_CENTER = {lat:34.027, lng: -118.401};
 
 var MAP_ZOOM_LEVEL = selectZoomLevel();
 
@@ -14,7 +14,7 @@ var YELP_TOKEN = 'IUGGqvuWCnEZz4Fx12Fik9la9Wb17jgI';
 var YELP_TOKEN_SECRET = 'XnxVSRkveoNhJp8jEjihFYo64h4';
 
 // Determine if the user is on a mobile device
-var USER_ON_MOBILE = mobileCheck();
+var USER_ON_MOBILE = Boolean(navigator.userAgent.match(/Mobi/));
 
 
 /* =============== GENERAL FUNCTIONS =============== */
@@ -22,24 +22,14 @@ var USER_ON_MOBILE = mobileCheck();
 // Check if the first string is a substring of the second.
 var isSubstring = function(substring, string) {
   return string.toLowerCase().indexOf(substring.toLowerCase()) > -1;
-}
+};
 
 // Return the appropriate map zoom level based on the screen width
 function selectZoomLevel() {
-  //if (window.innerWidth < 1000) { return 13 }
-  if (window.innerWidth < 600) { return 13 }
-  if (window.innerWidth < 1500) { return 14 }
-  return 15
+  if (window.innerWidth < 600) { return 13; }
+  if (window.innerWidth < 1500) { return 14; }
+  return 15;
 }
-
-// Return true if the user is on a mobile device.
-// Code found at: http://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
-function mobileCheck() {
-  var check = false;
-  (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4)))check = true})(navigator.userAgent||navigator.vendor||window.opera);
-  return check;
-};
-
 
 /* =============== RAW DATA FOR DEFAULT PLACES =============== */
 
@@ -121,7 +111,7 @@ var Place = function(placeData, map) {
   // Return the full address, with the street and city separated by a comma
   self.getAddress = function() {
     return self.address.street + ', ' + self.address.city;
-  }
+  };
 
   // Make and return the initial html for the info window
   self.makeInfoWindowHTML = function() {
@@ -213,7 +203,7 @@ var Place = function(placeData, map) {
     $(html).find('.yelp-img').on('load', function() {
       self.fadeOutSpinner(300);
       $yelpInfoDiv.delay(400).fadeIn('slow', function() {
-        $yelpInfoDiv.removeClass('hidden')
+        $yelpInfoDiv.removeClass('hidden');
       });
     });
 
@@ -236,7 +226,7 @@ var Place = function(placeData, map) {
 
     $yelpInfoDiv.append(html);
     self.fadeOutSpinner(300);
-    $yelpInfoDiv.delay(400).fadeIn('slow', function() {$yelpInfoDiv.removeClass('hidden') });
+    $yelpInfoDiv.delay(400).fadeIn('slow', function() {$yelpInfoDiv.removeClass('hidden'); });
   };
 
   // Given a JSON object of data returned from a yelp business API request,
@@ -281,13 +271,11 @@ var Place = function(placeData, map) {
     };
 
     // Loop over the `data` object and insert the data into the `html` template
-    for (var key in data) {
-      if (data.hasOwnProperty(key)) {
-        html = html.replace('{' + key + '}', data[key]);
-      }
-    }
+    Object.keys(data).forEach(function(key) {
+      html = html.replace('{' + key + '}', data[key]);
+    });
 
-    return html
+    return html;
   };
 
   // Fade out the spinner that is inside this Place's InfoWindow
@@ -302,7 +290,7 @@ var Place = function(placeData, map) {
   self.animateMarkerBounce = function() {
     if (!self.marker.getAnimation()) {
       self.marker.setAnimation(google.maps.Animation.BOUNCE);
-      setTimeout(function() { self.marker.setAnimation(null) }, 775);
+      setTimeout(function() { self.marker.setAnimation(null); }, 775);
     }
   };
 
@@ -328,14 +316,16 @@ function AppViewModel() {
 
   // Sort the placesData alphabetically by name
   placesData.sort(function(a, b) {
-    if (a.name < b.name) return -1;
-    if (a.name > b.name) return 1;
+    if (a.name < b.name) { return -1; }
+    if (a.name > b.name) { return 1; }
     return 0;
   });
 
   // Convert each object in placesData to a Place object and store all of them
   // in an observable array.
-  self.allPlaces = ko.observableArray(placesData.map(function(data) {return new Place(data)}));
+  self.allPlaces = ko.observableArray(placesData.map(function(data) {
+    return new Place(data);
+  }));
 
   // A ko.computed Array of all the Place objects whose map markers are visible on the map
   self.visiblePlaces = ko.computed(function() {
@@ -384,9 +374,9 @@ function AppViewModel() {
         })
       });
 
-      place.marker.addListener('click', function() { self.selectPlace(place) });
+      place.marker.addListener('click', function() { self.selectPlace(place); });
       place.marker.infowindow.addListener('closeclick', function() {
-        self.deselectPlace()
+        self.deselectPlace();
 
         // If a yelp ajax request fails, an error message will appear in the
         // selected Place's info window.  That error message will remain in the
@@ -484,7 +474,7 @@ function AppViewModel() {
       var $hamburgerBtn = $('#hamburger-btn');
       setTimeout(function() {
         $hamburgerBtn.fadeIn('slow', function() {
-          $hamburgerBtn.removeClass('hidden')
+          $hamburgerBtn.removeClass('hidden');
         });
       }, 500);
     });
@@ -519,7 +509,7 @@ function AppViewModel() {
         place.marker.setMap(self.map);
       } else {
         place.marker.setMap(null);
-        if (place === self.selectedPlace()) { self.deselectPlace() }
+        if (place === self.selectedPlace()) { self.deselectPlace(); }
       }
       return place;
     }));
@@ -543,10 +533,10 @@ function AppViewModel() {
     }
 
     // If the yelp data for this Place hasn't been retrieved, request it
-    if (!place.yelpDataReceived) { place.requestYelpData() }
+    if (!place.yelpDataReceived) { place.requestYelpData(); }
 
     // If another Place is currently selected, deselect it
-    if (self.selectedPlace()) { self.deselectPlace() }
+    if (self.selectedPlace()) { self.deselectPlace(); }
 
     // Set the given Place as the selectedPlace
     self.selectedPlace(place);
