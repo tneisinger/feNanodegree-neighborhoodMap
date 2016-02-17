@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/* jshint multistr: true */
 
 /* =============== CONSTANTS =============== */
 
@@ -117,35 +117,34 @@ var Place = function(placeData, map) {
   self.makeInfoWindowHTML = function() {
     // 'sk-fading-circle' spinner code found at:
     // http://tobiasahlin.com/spinkit/
-    var html = `
-      <div id="iw-{self.yelpID}" class="iw-container">
-        <div class="iw-header">
-          <h2 class="iw-title">
-            {self.name}
-          </h2>
-        </div>
-        <div class="iw-content">
-          <div class="sk-fading-circle">
-            <div class="sk-circle1 sk-circle"></div>
-            <div class="sk-circle2 sk-circle"></div>
-            <div class="sk-circle3 sk-circle"></div>
-            <div class="sk-circle4 sk-circle"></div>
-            <div class="sk-circle5 sk-circle"></div>
-            <div class="sk-circle6 sk-circle"></div>
-            <div class="sk-circle7 sk-circle"></div>
-            <div class="sk-circle8 sk-circle"></div>
-            <div class="sk-circle9 sk-circle"></div>
-            <div class="sk-circle10 sk-circle"></div>
-            <div class="sk-circle11 sk-circle"></div>
-            <div class="sk-circle12 sk-circle"></div>
-          </div>
-          <div class="yelp-info hidden">
-          </div>
-        </div>
-        <div class="iw-bottom-gradient">
-        </div>
-      </div>
-    `;
+    var html = ' \
+      <div id="iw-{self.yelpID}" class="iw-container"> \
+        <div class="iw-header"> \
+          <h2 class="iw-title"> \
+            {self.name} \
+          </h2> \
+        </div> \
+        <div class="iw-content"> \
+          <div class="sk-fading-circle"> \
+            <div class="sk-circle1 sk-circle"></div> \
+            <div class="sk-circle2 sk-circle"></div> \
+            <div class="sk-circle3 sk-circle"></div> \
+            <div class="sk-circle4 sk-circle"></div> \
+            <div class="sk-circle5 sk-circle"></div> \
+            <div class="sk-circle6 sk-circle"></div> \
+            <div class="sk-circle7 sk-circle"></div> \
+            <div class="sk-circle8 sk-circle"></div> \
+            <div class="sk-circle9 sk-circle"></div> \
+            <div class="sk-circle10 sk-circle"></div> \
+            <div class="sk-circle11 sk-circle"></div> \
+            <div class="sk-circle12 sk-circle"></div> \
+          </div> \
+          <div class="yelp-info hidden"> \
+          </div> \
+        </div> \
+        <div class="iw-bottom-gradient"> \
+        </div> \
+      </div>';
 
     return html
       .replace('{self.yelpID}', self.yelpID)
@@ -215,14 +214,14 @@ var Place = function(placeData, map) {
     // Select this Place's yelp-info div in the DOM
     var $yelpInfoDiv = $('#iw-' + self.yelpID + ' .yelp-info');
 
-    var html = `
-      <div class="yelp-error">
-          <p class="yelp-error-emoticon">: (</p>
-          <p class="yelp-error-message">
-            Unable to retrieve Yelp data. Please try again later.
-          </p>
-      </div>
-    `;
+    var html = ' \
+      <div class="yelp-error"> \
+          <p class="yelp-error-emoticon">: (</p> \
+          <p class="yelp-error-message"> \
+            Unable to retrieve Yelp data. Please try again later. \
+          </p> \
+      </div> \
+    ';
 
     $yelpInfoDiv.append(html);
     self.fadeOutSpinner(300);
@@ -234,28 +233,28 @@ var Place = function(placeData, map) {
   self.makeYelpHTML = function(yelpData) {
 
     // Create an html template that will be filled in with yelp the data.
-    var html = `
-      <div class="snippet-and-img-div">
-        <div class="yelp-snippet-div">
-          <p class="yelp-snippet">"{snippet_text}"</p>
-        </div>
-        <div class="yelp-img-div">
-          <img class="yelp-img" src="{image_url}" />
-        </div>
-      </div>
-      <table>
-        <tbody>
-          <tr>
-            <td><img class="yelp-rating-img" src="{rating_img_url}"></td>
-            <td class="review-count">{review_count} Reviews</td>
-          </tr>
-          <tr>
-            <td>{display_phone}</td>
-            <td><a href="{yelp_url}">View on Yelp</a></td>
-          </tr>
-        </tbody>
-      </table>
-    `;
+    var html = ' \
+      <div class="snippet-and-img-div"> \
+        <div class="yelp-snippet-div"> \
+          <p class="yelp-snippet">"{snippet_text}"</p> \
+        </div> \
+        <div class="yelp-img-div"> \
+          <img class="yelp-img" src="{image_url}" /> \
+        </div> \
+      </div> \
+      <table> \
+        <tbody> \
+          <tr> \
+            <td><img class="yelp-rating-img" src="{rating_img_url}"></td> \
+            <td class="review-count">{review_count} Reviews</td> \
+          </tr> \
+          <tr> \
+            <td>{display_phone}</td> \
+            <td><a href="{yelp_url}">View on Yelp</a></td> \
+          </tr> \
+        </tbody> \
+      </table> \
+    ';
 
     // Remove country code from phone number
     var phoneNumber = yelpData.display_phone.substring(3);
