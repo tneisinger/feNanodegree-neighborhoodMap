@@ -120,6 +120,8 @@ input {
     right: 15px;
     font-size: 1.5em;
     color: #888;
+    cursor: pointer;
+    cursor: hand;
 }
 
 #list-div {
@@ -138,6 +140,8 @@ ul {
 
 li {
     padding: 15px 15px 10px 15px;
+    cursor: pointer;
+    cursor: hand;
 }
 
 .selected {
