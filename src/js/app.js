@@ -500,15 +500,13 @@ function AppViewModel() {
 
   // When the user changes the searchString, map over allPlaces.  If the new
   // searchString is a subtring of a given place's name, show that place's map
-  // marker.  Otherwise, hide that place's map marker. If the selectedPlace
-  // does not match the searchString, deselect it.
+  // marker.  Otherwise, hide that place's map marker.
   self.onSearchChange = function() {
     self.allPlaces(ko.utils.arrayMap(self.allPlaces(), function(place) {
       if (isSubstring(self.searchString(), place.name)) {
         place.marker.setMap(self.map);
       } else {
         place.marker.setMap(null);
-        if (place === self.selectedPlace()) { self.deselectPlace(); }
       }
       return place;
     }));
