@@ -486,6 +486,11 @@ function AppViewModel() {
     });
   };
 
+  self.mapError = function() {
+    // TODO: Do something better than this!
+    console.log('There was a map error!');
+  }
+
   self.openSearchMenu = function() {
     self.isSearchMenuOpen(true);
   };
