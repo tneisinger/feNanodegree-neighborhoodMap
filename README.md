@@ -28,7 +28,7 @@ re-minify the source code and save it into the dist/ directory.
 
 The following resources were used in the creation of this project:
 
-  * CSS Spinner code from: [http://tobiasahlin.com/spinkit/](http://tobiasahlin.com/spinkit/)
+  * The CSS Spinner code is from [http://tobiasahlin.com/spinkit/](http://tobiasahlin.com/spinkit/)
 
   * Hamburger icon made by [Ameer Nuri](https://www.iconfinder.com/jpenser)
     from [www.iconfinder.com](https://www.iconfinder.com)
@@ -37,5 +37,5 @@ The following resources were used in the creation of this project:
     [SimpleIcon](http://www.flaticon.com/authors/simpleicon) from
     [www.flaticon.com](http://www.flaticon.com)
 
-  * Tutorial used for Google Maps InfoWindow customization found
-    [here](http://en.marnoto.com/2014/09/5-formas-de-personalizar-infowindow.html)
+  * The Info Window customizations were inspired by [this
+    tutorial](http://en.marnoto.com/2014/09/5-formas-de-personalizar-infowindow.html)
