@@ -272,6 +272,7 @@ iw-content a:hover {
     display: -webkit-flex;
     flex-direction: column;
     justify-content: center;
+    min-width: 100px;
 }
 
 .yelp-img {
