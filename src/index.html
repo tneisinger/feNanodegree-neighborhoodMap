@@ -13,21 +13,21 @@
 <body>
 
     <!-- Hamburger Button -->
-    <div id="hamburger-btn" class="hidden" data-bind="click: openSearchMenu">
+    <div class="hamburger-btn hidden" data-bind="click: openSearchMenu">
         <img src="img/hamburger-icon.svg" alt="menu">
     </div>
 
     <!--Show-All Button-->
-    <div id="show-all-btn" class="hidden" data-bind="click: clearSearchString, css: {hidden: searchString() === ''}">
+    <div class="show-all-btn hidden" data-bind="click: clearSearchString, css: {hidden: searchString() === ''}">
         <span>Show All</span>
         <img class="map-marker-img" src="img/map-marker.svg" alt="map marker logo">
     </div>
 
     <!--Search List Menu-->
-    <aside id="search-menu" data-bind="css: {open: isSearchMenuOpen()}">
+    <aside class="search-menu" data-bind="css: {open: isSearchMenuOpen()}">
         <input placeholder="Search" data-bind="textInput: searchString, event: {keyup: onSearchChange}" />
-        <span id="clear-search-btn" data-bind="click: clearSearchString, css: { hidden: searchString() === ''}">x</span>
-        <div id="list-div">
+        <span class="clear-search-btn" data-bind="click: clearSearchString, css: { hidden: searchString() === ''}">x</span>
+        <div class="list-div">
             <ul data-bind="foreach: visiblePlaces">
                 <li data-bind="click: $root.selectPlace, css: { selected: $root.selectedPlace() === $data }">
                     <img class="map-marker-img" src="img/map-marker.svg" alt="map marker logo">
@@ -38,11 +38,11 @@
                 </li>
             </ul>
         </div>
-        <div id="list-bottom-gradient"></div>
+        <div class="list-bottom-gradient"></div>
     </aside>
 
     <!--Google Map-->
-    <div id="map"></div>
+    <div class="map"></div>
 
     <!--Javascript files-->
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>

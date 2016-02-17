@@ -118,7 +118,7 @@ var Place = function(placeData, map) {
     // 'sk-fading-circle' spinner code found at:
     // http://tobiasahlin.com/spinkit/
     var html = ' \
-      <div id="iw-{self.yelpID}" class="iw-container"> \
+      <div class="iw-{self.yelpID} iw-container"> \
         <div class="iw-header"> \
           <h2 class="iw-title"> \
             {self.name} \
@@ -192,7 +192,7 @@ var Place = function(placeData, map) {
   // returned from a yelp business api request.
   self.fillYelpInfoDiv = function(yelpData) {
     // Select this Place's yelp-info div in the DOM
-    var $yelpInfoDiv = $('#iw-' + self.yelpID + ' .yelp-info');
+    var $yelpInfoDiv = $('.iw-' + self.yelpID + ' .yelp-info');
 
     // Make the html and append it to the yelp-info div
     var html = self.makeYelpHTML(yelpData);
@@ -212,7 +212,7 @@ var Place = function(placeData, map) {
   // message.
   self.fillYelpInfoDivErr = function(error) {
     // Select this Place's yelp-info div in the DOM
-    var $yelpInfoDiv = $('#iw-' + self.yelpID + ' .yelp-info');
+    var $yelpInfoDiv = $('.iw-' + self.yelpID + ' .yelp-info');
 
     var html = ' \
       <div class="yelp-error"> \
@@ -279,7 +279,7 @@ var Place = function(placeData, map) {
 
   // Fade out the spinner that is inside this Place's InfoWindow
   self.fadeOutSpinner = function(speed) {
-    var $spinnerDiv = $('#iw-' + self.yelpID + ' .sk-fading-circle');
+    var $spinnerDiv = $('.iw-' + self.yelpID + ' .sk-fading-circle');
     $spinnerDiv.fadeOut(speed, function() {
       $spinnerDiv.addClass('hidden');
     });
@@ -338,7 +338,7 @@ function AppViewModel() {
   self.initMap = function() {
 
     // Create the map
-    self.map = new google.maps.Map(document.getElementById('map'), {
+    self.map = new google.maps.Map(document.getElementsByClassName('map')[0], {
       center: MAP_CENTER,
       zoom: MAP_ZOOM_LEVEL,
       disableDefaultUI: true
@@ -470,7 +470,7 @@ function AppViewModel() {
 
     // When the map is finished loading, fade in the hamburger button
     google.maps.event.addListenerOnce(self.map, 'tilesloaded', function() {
-      var $hamburgerBtn = $('#hamburger-btn');
+      var $hamburgerBtn = $('.hamburger-btn');
       setTimeout(function() {
         $hamburgerBtn.fadeIn('slow', function() {
           $hamburgerBtn.removeClass('hidden');
@@ -495,7 +495,7 @@ function AppViewModel() {
     // For mobile, you must remove focus from the input element when closing the
     // search menu.  If not, the keyboard on mobile devices will constantly pop
     // up whenever the user interacts with the map.
-    $('#search-menu input').blur();
+    $('.search-menu input').blur();
   };
 
   // When the user changes the searchString, map over allPlaces.  If the new

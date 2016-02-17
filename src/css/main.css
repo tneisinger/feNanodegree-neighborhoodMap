@@ -30,14 +30,14 @@ p {
 
 /* =============== Google Maps =============== */
 
-#map {
+.map {
     height: 100%;
     width: 100%;
 }
 
 /* =============== Hamburger Button =============== */
 
-#hamburger-btn {
+.hamburger-btn {
     position: absolute;
     top: 10px;
     left: 10px;
@@ -51,14 +51,14 @@ p {
     cursor: hand;
 }
 
-#hamburger-btn img {
+.hamburger-btn img {
     margin: 5px 8px 0px 8px;
     width: 30px;
 }
 
 /* =============== Show-All Button =============== */
 
-#show-all-btn {
+.show-all-btn {
     position: absolute;
     top: 60px;
     left: 10px;
@@ -73,7 +73,7 @@ p {
     cursor: hand;
 }
 
-#show-all-btn span {
+.show-all-btn span {
     font-weight: bold;
     font-size: 0.65em;
     color: #888;
@@ -81,7 +81,7 @@ p {
     padding: 0;
 }
 
-#show-all-btn img {
+.show-all-btn img {
     display: block;
     width: 25px;
     margin: 0 auto;
@@ -91,7 +91,7 @@ p {
 
 /* =============== Search Menu =============== */
 
-#search-menu {
+.search-menu {
     height: 100%;
     position: absolute;
     z-index: 2;
@@ -102,7 +102,7 @@ p {
     transition: transform 0.3s ease;
 }
 
-#search-menu.open {
+.open {
     transform: translate(0, 0);
 }
 
@@ -117,7 +117,7 @@ input {
     padding: 0;
 }
 
-#clear-search-btn {
+.clear-search-btn {
     position: absolute;
     top: 10px;
     right: 15px;
@@ -127,7 +127,7 @@ input {
     cursor: hand;
 }
 
-#list-div {
+.list-div {
     border-top: 1px solid #48b5e9;
     border-bottom: 1px solid #ccc;
     overflow-y: auto;
@@ -171,7 +171,7 @@ li + li {
     margin-top: 5px;
 }
 
-#list-bottom-gradient {
+.list-bottom-gradient {
     pointer-events: none;
     position: absolute;
     width: 270px;
@@ -509,7 +509,7 @@ iw-content a:hover {
 
     /* =============== Google Maps =============== */
     
-    #map {
+    .map {
         position: absolute;
         left: 350px;
         width: calc(100% - 350px);
@@ -517,12 +517,12 @@ iw-content a:hover {
 
     /* =============== Search Menu =============== */
     
-    #search-menu {
+    .search-menu {
         width: 350px;
         transform: translate(0px);
     }
 
-    #list-bottom-gradient {
+    .list-bottom-gradient {
         width: 350px;
     }
 
