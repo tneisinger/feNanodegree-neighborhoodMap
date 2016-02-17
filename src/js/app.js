@@ -535,6 +535,13 @@ function AppViewModel() {
   // marker or by clicking on its <li> element in the search menu.
   self.selectPlace = function(place) {
 
+    // If the given place is already selected, bounce the map marker but do
+    // nothing else.
+    if (self.selectedPlace() === place) {
+      place.animateMarkerBounce();
+      return;
+    }
+
     // If the yelp data for this Place hasn't been retrieved, request it
     if (!place.yelpDataReceived) { place.requestYelpData() }
 
