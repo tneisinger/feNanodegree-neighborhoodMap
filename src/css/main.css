@@ -185,7 +185,7 @@ li + li {
 }
 
 
-/* =============== Map Marker Info Windows =============== */
+/* =============== Info Windows =============== */
 
 /* This class applies to divs which the google maps api generates
  * automatically. All info windows are decendants of a div
@@ -478,8 +478,20 @@ iw-content a:hover {
 /* =============== Media Queries =============== */
 
 /* On windows wider than 1000px, make the search menu
- * permanently visible, and make text larger */
+ * permanently visible, and make text and InfoWindows larger */
 @media screen and (min-width: 1000px) {
+
+    /* =============== Google Maps =============== */
+
+    #map {
+        position: absolute;
+        left: 350px;
+        width: calc(100% - 350px);
+    }
+
+
+    /* =============== Search Menu =============== */
+
     #search-menu {
         width: 350px;
         transform: translate(0px);
@@ -487,12 +499,6 @@ iw-content a:hover {
 
     #list-bottom-gradient {
         width: 350px;
-    }
-
-    #map {
-        position: absolute;
-        left: 350px;
-        width: calc(100% - 350px);
     }
 
     .map-marker-img {
@@ -510,6 +516,9 @@ iw-content a:hover {
         margin-top: 5px;
     }
 
+
+    /* =============== Info Windows =============== */
+
     .gm-style-iw {
         width: 400px !important;
         height: 250px !important;
@@ -521,12 +530,6 @@ iw-content a:hover {
         width: 400px;
     }
 
-    .iw-content {
-        padding: 15px 25px 0px 25px;
-        overflow-y: hidden;
-        height: auto;
-    }
-
     .iw-header {
         padding-bottom: 5px;
     }
@@ -534,6 +537,18 @@ iw-content a:hover {
     .iw-header h2 {
         font-size: 1.75em;
         font-weight: normal;
+    }
+
+    .iw-content {
+        padding: 15px 25px 0px 25px;
+        overflow-y: hidden;
+        min-height: 250px;
+        height: auto;
+    }
+
+    /* Position the spinner to the center of the info window */
+    .sk-fading-circle .sk-circle {
+      top: -30px;
     }
 
     .yelp-snippet-div {
@@ -551,12 +566,21 @@ iw-content a:hover {
         padding-bottom: 10px;
     }
 
-    .iw-bottom-gradient {
-       display: none;
+    .yelp-error {
+        margin-top: 30px;
     }
 
-    .sk-fading-circle .sk-circle {
-      top: -30px;
+    .yelp-error-emoticon {
+        font-size: 3em;
+        margin-bottom: 30px;
+    }
+
+    .yelp-error-message {
+        font-size: 1.5em;
+    }
+
+    .iw-bottom-gradient {
+       display: none;
     }
 }
 
