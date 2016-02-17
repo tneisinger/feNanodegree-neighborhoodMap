@@ -46,6 +46,8 @@ p {
     border-radius: 5px;
     outline: none;
     opacity: 0.75;
+    cursor: pointer;
+    cursor: hand;
 }
 
 #hamburger-btn img {
@@ -67,6 +69,8 @@ p {
     outline: none;
     opacity: 0.75;
     padding: 0 5px 5px 5px;
+    cursor: pointer;
+    cursor: hand;
 }
 
 
@@ -472,6 +476,8 @@ iw-content a:hover {
 
 /* =============== Media Queries =============== */
 
+/* On windows wider than 1000px, make the search menu
+ * permanently visible, and make text larger */
 @media screen and (min-width: 1000px) {
     #search-menu {
         width: 350px;
