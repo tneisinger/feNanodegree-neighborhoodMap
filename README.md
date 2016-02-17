@@ -13,9 +13,7 @@ is saved in the dist/ directory.
 
 ## Setup
 
-The final project can be seen
-[here](http://tneisinger.github.io/feNanodegree-neighborhoodMap).  If you would
-like to install and run this project on your local machine, clone this repo and
+To install and run this project on your local machine, clone this repo and
 run `npm install` in the repo's root directory. After npm has installed all the
 dependencies, open the dist/index.html file in your favorite web browser.
 
