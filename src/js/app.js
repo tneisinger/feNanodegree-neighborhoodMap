@@ -5,8 +5,6 @@
 var MAP_CENTER = {lat:34.027, lng: -118.401}
 
 var MAP_ZOOM_LEVEL = selectZoomLevel();
-console.log('window width:', window.innerWidth);
-console.log('zoom level:', MAP_ZOOM_LEVEL);
 
 // Yelp API constants
 var YELP_URL = 'https://api.yelp.com/v2/business/';
@@ -302,7 +300,7 @@ var Place = function(placeData, map) {
 
   // Animate this Place's map marker to bounce one time.
   self.animateMarkerBounce = function() {
-    if (self.marker.getAnimation() === null) {
+    if (!self.marker.getAnimation()) {
       self.marker.setAnimation(google.maps.Animation.BOUNCE);
       setTimeout(function() { self.marker.setAnimation(null) }, 775);
     }
@@ -436,6 +434,13 @@ function AppViewModel() {
           'border-radius': '5px',
           // Make sure that the close button is clickable
           'pointer-events': 'auto'
+        });
+
+        // The google maps API automatically applies 0.7 opacity to the button
+        // after the mouseout event.  This function reverses this event to the
+        // desired value.
+        iwCloseBtn.mouseout(function(){
+          $(this).css({opacity: '1'});
         });
 
         // Get a reference to the transparent image which functions as the
