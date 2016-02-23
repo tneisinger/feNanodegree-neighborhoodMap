@@ -35,6 +35,15 @@ p {
     width: 100%;
 }
 
+.map-error-div {
+    position: absolute;
+    top: 30px;
+    width: 100%;
+    font-size: 1.5em;
+    text-align: center;
+    color: red;
+}
+
 /* =============== Hamburger Button =============== */
 
 .hamburger-btn {

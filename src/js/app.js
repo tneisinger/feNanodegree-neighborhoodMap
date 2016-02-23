@@ -285,7 +285,7 @@ function AppViewModel() {
   self.initMap = function() {
 
     // Create the map
-    self.map = new google.maps.Map(document.getElementsByClassName('map')[0], {
+    self.map = new google.maps.Map(document.getElementById('map'), {
       center: MAP_CENTER,
       zoom: MAP_ZOOM_LEVEL,
       disableDefaultUI: true
@@ -433,12 +433,7 @@ function AppViewModel() {
 
     // When the map is finished loading, fade in the hamburger button
     google.maps.event.addListenerOnce(self.map, 'tilesloaded', function() {
-      var $hamburgerBtn = $('.hamburger-btn');
-      setTimeout(function() {
-        $hamburgerBtn.fadeIn('slow', function() {
-          $hamburgerBtn.removeClass('hidden');
-        });
-      }, 500);
+      self.fadeInHamburgerBtn();
     });
 
     // If the map is clicked while the seach menu is open, close the menu
@@ -450,8 +445,20 @@ function AppViewModel() {
   };
 
   self.mapError = function() {
-    // TODO: Do something better than this!
-    console.log('There was a map error!');
+    var $mapErrorDiv = $('#map-error-div');
+    $mapErrorDiv.fadeIn(function() {
+      $mapErrorDiv.removeClass('hidden');
+    });
+    console.log('An error occured while trying to load the Google Maps API');
+  };
+
+  self.fadeInHamburgerBtn = function() {
+    var $hamburgerBtn = $('.hamburger-btn');
+    setTimeout(function() {
+      $hamburgerBtn.fadeIn('slow', function() {
+        $hamburgerBtn.removeClass('hidden');
+      });
+    }, 500);
   };
 
   self.openSearchMenu = function() {
