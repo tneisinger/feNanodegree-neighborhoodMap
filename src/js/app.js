@@ -508,6 +508,12 @@ function AppViewModel() {
     // Set the given Place as the selectedPlace
     self.selectedPlace(place);
 
+    // On devices with screens smaller than 1000px, close the search menu if
+    // it is open.  The search menu never closes on devices with screens wider
+    // than 1000px.  See css/main.css for details.
+    self.isSearchMenuOpen(false);
+
+    // Bounce the map marker and open the info window.
     place.animateMarkerBounce();
     place.marker.infowindow.open(self.map, place.marker);
   };
