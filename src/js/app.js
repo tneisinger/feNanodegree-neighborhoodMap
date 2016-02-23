@@ -190,7 +190,7 @@ var Place = function(placeData, map) {
   };
 
   self.fadeInYelpErrorDiv = function(yelpData) {
-    // Select this Place's yelp-info div in the DOM
+    // Select this Place's yelp-error div in the DOM
     var $yelpErrorDiv = $('#iw-' + self.yelpID + ' .yelp-error');
 
     // Fade out the spinner and fade in the .yelp-error div
