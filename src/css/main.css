@@ -239,7 +239,7 @@ li + li {
     text-decoration: none;
 }
 
-iw-content a:hover {
+.iw-content a:hover {
     text-decoration: underline;
 }
 
@@ -513,7 +513,7 @@ iw-content a:hover {
     }
 
     /* =============== Search Menu =============== */
-    
+
     .search-menu {
         width: 350px;
         transform: translate(0px);
@@ -539,7 +539,7 @@ iw-content a:hover {
     }
 
     /* =============== Info Windows =============== */
-    
+
     .gm-style-iw {
         width: 400px !important;
         height: 250px !important;
