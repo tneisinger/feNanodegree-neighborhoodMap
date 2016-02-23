@@ -102,7 +102,6 @@ var Place = function(placeData, map) {
   self.name = placeData.name;
   self.yelpID = placeData.yelpID;
   self.location = placeData.location;
-  self.marker = {map: map};
   self.address = placeData.address;
   self.yelpDataReceived = false;
 
@@ -115,8 +114,8 @@ var Place = function(placeData, map) {
 
   // Make and return the initial html for the info window
   self.makeInfoWindowHTML = function() {
-    // 'sk-fading-circle' spinner code found at:
-    // http://tobiasahlin.com/spinkit/
+
+    // Define the html that will go in the info windows.
     var html = ' \
       <div id="iw-{yelpID}" class="iw-container" data-bind="with: selectedPlace"> \
         <div class="iw-header"> \
@@ -173,76 +172,42 @@ var Place = function(placeData, map) {
         </div> \
       </div>';
 
-    return html.replace('{yelpID}', self.yelpID).replace('{name}', self.name);
-  };
-
-  // Make an ajax request to the yelp business api about this Place
-  // Fill in the yelp-info div of the this Place's info window with data
-  // returned from a yelp business api request.
-  self.fillYelpInfoDiv = function(yelpData) {
-    // Select this Place's yelp-info div in the DOM
-    var $yelpInfoDiv = $('.iw-' + self.yelpID + ' .yelp-info');
-
-    // Make the html and append it to the yelp-info div
-    var html = self.makeYelpHTML(yelpData);
-    $yelpInfoDiv.append(html);
-
-    // Once the main yelp image has loaded, fade in the yelp-info div
-    $(html).find('.yelp-img').on('load', function() {
-      self.fadeOutSpinner(300);
-      $yelpInfoDiv.delay(400).fadeIn('slow', function() {
-        $yelpInfoDiv.removeClass('hidden');
-      });
-    });
+    // Replace '{yelpID}' and '{name}' with the yelpID and name of this Place
+    return html
+      .replace('{yelpID}', self.yelpID)
+      .replace('{name}', self.name);
   };
 
   self.fadeInYelpInfoDiv = function(yelpData) {
     // Select this Place's yelp-info div in the DOM
     var $yelpInfoDiv = $('#iw-' + self.yelpID + ' .yelp-info');
 
-    // Once the main yelp image has loaded, fade in the yelp-info div
-    //$yelpInfoDiv.find('.yelp-img').on('load', function() {
-      self.fadeOutSpinner(300);
-      $yelpInfoDiv.delay(400).fadeIn('slow', function() {
-        $yelpInfoDiv.removeClass('hidden');
-      });
-    //});
+    // Fade out the spinner and fade in the .yelp-info div
+    self.fadeOutSpinner(300);
+    $yelpInfoDiv.delay(400).fadeIn('slow', function() {
+      $yelpInfoDiv.removeClass('hidden');
+    });
   };
 
   self.fadeInYelpErrorDiv = function(yelpData) {
     // Select this Place's yelp-info div in the DOM
     var $yelpErrorDiv = $('#iw-' + self.yelpID + ' .yelp-error');
 
+    // Fade out the spinner and fade in the .yelp-error div
     self.fadeOutSpinner(300);
     $yelpErrorDiv.delay(400).fadeIn('slow', function() {
       $yelpErrorDiv.removeClass('hidden');
     });
   };
 
-  // Fill in the yelp-info div of the this Place's info window with an error
-  // message.
-  self.fillYelpInfoDivErr = function(error) {
-    // Select this Place's yelp-info div in the DOM
-    var $yelpInfoDiv = $('.iw-' + self.yelpID + ' .yelp-info');
-
-    var html = ' \
-      <div class="yelp-error"> \
-          <p class="yelp-error-emoticon">: (</p> \
-          <p class="yelp-error-message"> \
-            Unable to retrieve Yelp data. Please try again later. \
-          </p> \
-      </div> \
-    ';
-
-    $yelpInfoDiv.append(html);
-    self.fadeOutSpinner(300);
-    $yelpInfoDiv.delay(400).fadeIn('slow', function() {$yelpInfoDiv.removeClass('hidden'); });
-  };
-
+  // Given a yelpData object returned from the yelp Business API,
+  // store the necessary data in this Place.
   self.storeYelpData = function(yelpData) {
+
     // Remove country code from phone number
     var phoneNumber = yelpData.display_phone.substring(3);
 
+    // Store the data
     self.yelpData = {
       snippet: yelpData.snippet_text,
       imageUrl: yelpData.image_url,
@@ -251,55 +216,6 @@ var Place = function(placeData, map) {
       displayPhone: phoneNumber,
       yelpUrl: USER_ON_MOBILE ? yelpData.mobile_url : yelpData.url
     };
-  };
-
-  // Given a JSON object of data returned from a yelp business API request,
-  // return the html that will be used in the info window's 'yelp-info' div.
-  self.makeYelpHTML = function(yelpData) {
-
-    // Create an html template that will be filled in with yelp the data.
-    var html = ' \
-      <div class="snippet-and-img-div"> \
-        <div class="yelp-snippet-div"> \
-          <p class="yelp-snippet">"{snippet_text}"</p> \
-        </div> \
-        <div class="yelp-img-div"> \
-          <img class="yelp-img" src="{image_url}" /> \
-        </div> \
-      </div> \
-      <table> \
-        <tbody> \
-          <tr> \
-            <td><img class="yelp-rating-img" src="{rating_img_url}"></td> \
-            <td class="review-count">{review_count} Reviews</td> \
-          </tr> \
-          <tr> \
-            <td>{display_phone}</td> \
-            <td><a href="{yelp_url}">View on Yelp</a></td> \
-          </tr> \
-        </tbody> \
-      </table> \
-    ';
-
-    // Remove country code from phone number
-    var phoneNumber = yelpData.display_phone.substring(3);
-
-    // An object containing the data that will be inserted into the html
-    var data = {
-      snippet_text: yelpData.snippet_text,
-      image_url: yelpData.image_url,
-      rating_img_url: yelpData.rating_img_url,
-      review_count: yelpData.review_count,
-      display_phone: phoneNumber,
-      yelp_url: USER_ON_MOBILE ? yelpData.mobile_url : yelpData.url
-    };
-
-    // Loop over the `data` object and insert the data into the `html` template
-    Object.keys(data).forEach(function(key) {
-      html = html.replace('{' + key + '}', data[key]);
-    });
-
-    return html;
   };
 
   // Fade out the spinner that is inside this Place's InfoWindow
@@ -314,7 +230,7 @@ var Place = function(placeData, map) {
   self.animateMarkerBounce = function() {
     if (!self.marker.getAnimation()) {
       self.marker.setAnimation(google.maps.Animation.BOUNCE);
-      setTimeout(function() { self.marker.setAnimation(null); }, 775);
+      setTimeout(function() { self.marker.setAnimation(null); }, 700);
     }
   };
 
@@ -329,6 +245,10 @@ function AppViewModel() {
   // initMap callback is called by the Google Maps api.
   self.map = null;
 
+  // An observable that determines whether the search menu is open or not.
+  // This observable has no effect when the app is running on a device with
+  // a screen wider than 1000px, because in that case, the search menu is
+  // always open. Check css/main.css for details.
   self.isSearchMenuOpen = ko.observable(false);
 
   // searchSring is the value inside the input element at the top of the search-menu
@@ -338,23 +258,25 @@ function AppViewModel() {
   // selectedPlace will have its InfoWindow open above its marker.
   self.selectedPlace = ko.observable(null);
 
-  // Sort the placesData alphabetically by name
-  placesData.sort(function(a, b) {
-    if (a.name < b.name) { return -1; }
-    if (a.name > b.name) { return 1; }
-    return 0;
-  });
-
   // Convert each object in placesData to a Place object and store all of them
   // in an observable array.
   self.allPlaces = ko.observableArray(placesData.map(function(data) {
     return new Place(data);
   }));
 
+  // Sort the Places alphabetically by name
+  self.allPlaces.sort(function (a, b) {
+    if (a.name < b.name) { return -1; }
+    if (a.name > b.name) { return 1; }
+    return 0;
+  });
+
   // A ko.computed Array of all the Place objects whose map markers are visible on the map
   self.visiblePlaces = ko.computed(function() {
     return ko.utils.arrayFilter(self.allPlaces(), function(place) {
-      return place.marker.map === self.map;
+      // If a Place's marker hasn't been defined yet, consider it visible.
+      if (!place.marker) { return true }
+      return place.marker.getVisible();
     });
   });
 
@@ -393,19 +315,22 @@ function AppViewModel() {
         map: self.map,
         infowindow: new google.maps.InfoWindow({
           content: place.makeInfoWindowHTML(),
-          //content: IW_CONTENT_SIMPLE,
+
           // Adjust the offset so that the info window tail touches the center of marker
           pixelOffset: new google.maps.Size(-1, 20)
         })
       });
 
+      // If a map marker is clicked, select the corresponding Place.
       place.marker.addListener('click', function() { self.selectPlace(place); });
+
+      // When closing an info window, deselect the corresponding Place and
+      // if no yelpData was received, reset the info window content.
       place.marker.infowindow.addListener('closeclick', function() {
         self.deselectPlace();
-
         // If a yelp ajax request fails, an error message will appear in the
         // selected Place's info window.  That error message will remain in the
-        // info window until the setContent method is called on it.  In order
+        // info window unless the setContent method is called on it.  In order
         // for the Info Window to behave correctly the next time it is opened,
         // its content must be reset to the initial value with the
         // makeInfoWindowHTML method.
@@ -414,24 +339,29 @@ function AppViewModel() {
         }
       });
 
-
       // Change the default appearance of info windows. Code inspired by:
       // http://en.marnoto.com/2014/09/5-formas-de-personalizar-infowindow.html
       place.marker.infowindow.addListener('domready', function() {
 
-        // If the yelp data for this info window hasn't been received,
-        // applyBindings?
+        // If the yelp data for this Place has not been received, that means
+        // that either this info window is being opened for the first time, or
+        // that its content was reset when it was last closed.  In both of
+        // those cases, it is necessary to applyBindings to the info window
+        // html.  If the yelpData has been received, then the bindings
+        // have already been applied. Applying them again would cause an error.
+        // See the definition for the 'closeclick' info window listener above
+        // for more details.
         if (!place.yelpDataReceived) {
           ko.applyBindings(app.vm, document.getElementById('iw-' + place.yelpID));
         }
 
-        // Hide certain ugly divs are that generated by the google maps API
+        // Hide certain ugly divs that are generated by the google maps API
         var iwOuter = $('.gm-style-iw');
         var iwBackground = iwOuter.prev();
         iwBackground.children(':nth-child(2)').css({'display': 'none'});
         iwBackground.children(':nth-child(4)').css({'display': 'none'});
 
-        // Move the tail of the info window to be on top of the main info window
+        // Move the tail of the info window to be on top of the main info window div
         iwBackground.children(':nth-child(3)').find('div').children().css({
           top: '-4px',
           'z-index': '1'
@@ -542,9 +472,11 @@ function AppViewModel() {
   self.onSearchChange = function() {
     self.allPlaces(ko.utils.arrayMap(self.allPlaces(), function(place) {
       if (isSubstring(self.searchString(), place.name)) {
-        place.marker.setMap(self.map);
+        //place.marker.setMap(self.map);
+        place.marker.setVisible(true);
       } else {
-        place.marker.setMap(null);
+        //place.marker.setMap(null);
+        place.marker.setVisible(false);
       }
       return place;
     }));
@@ -567,7 +499,7 @@ function AppViewModel() {
       return;
     }
 
-    // If the yelp data for this Place hasn't been retrieved, request it
+    // If the yelp data for this Place hasn't been received, request it
     if (!place.yelpDataReceived) { self.requestYelpData(place); }
 
     // If another Place is currently selected, deselect it
