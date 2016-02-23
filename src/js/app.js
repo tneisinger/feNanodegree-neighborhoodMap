@@ -275,7 +275,7 @@ function AppViewModel() {
   self.visiblePlaces = ko.computed(function() {
     return ko.utils.arrayFilter(self.allPlaces(), function(place) {
       // If a Place's marker hasn't been defined yet, consider it visible.
-      if (!place.marker) { return true }
+      if (!place.marker) { return true; }
       return place.marker.getVisible();
     });
   });
@@ -452,7 +452,7 @@ function AppViewModel() {
   self.mapError = function() {
     // TODO: Do something better than this!
     console.log('There was a map error!');
-  }
+  };
 
   self.openSearchMenu = function() {
     self.isSearchMenuOpen(true);
