@@ -104,7 +104,7 @@ var Place = function(placeData, map) {
   self.location = placeData.location;
   self.marker = {map: map};
   self.address = placeData.address;
-  self.yelpDataRecieved = false;
+  self.yelpDataReceived = false;
 
   /* METHODS */
 
@@ -118,11 +118,9 @@ var Place = function(placeData, map) {
     // 'sk-fading-circle' spinner code found at:
     // http://tobiasahlin.com/spinkit/
     var html = ' \
-      <div class="iw-{self.yelpID} iw-container"> \
+      <div id="iw-{yelpID}" class="iw-container" data-bind="with: selectedPlace"> \
         <div class="iw-header"> \
-          <h2 class="iw-title"> \
-            {self.name} \
-          </h2> \
+          <h2 class="iw-title">{name}</h2> \
         </div> \
         <div class="iw-content"> \
           <div class="sk-fading-circle"> \
@@ -139,55 +137,46 @@ var Place = function(placeData, map) {
             <div class="sk-circle11 sk-circle"></div> \
             <div class="sk-circle12 sk-circle"></div> \
           </div> \
-          <div class="yelp-info hidden"> \
+          <div class="yelp-info hidden" data-bind="if: yelpDataReceived"> \
+            <div class="snippet-and-img-div">\
+              <div class="yelp-snippet-div">\
+                <p class="yelp-snippet" data-bind="text: yelpData.snippet"></p>\
+              </div>\
+              <div class="yelp-img-div">\
+                <img class="yelp-img" data-bind="attr: { src: yelpData.imageUrl }">\
+              </div>\
+            </div>\
+            <table>\
+              <tbody>\
+                <tr>\
+                  <td>\
+                    <img class="yelp-rating-img" data-bind="attr: { src: yelpData.ratingImgUrl }">\
+                  </td>\
+                  <td class="review-count" data-bind="text: yelpData.reviewCount"></td>\
+                </tr>\
+                <tr>\
+                  <td data-bind="text: yelpData.displayPhone"></td>\
+                  <td>\
+                    <a data-bind="attr: { href: yelpData.yelpUrl }">View on Yelp</a>\
+                </tr>\
+              </tbody>\
+            </table>\
+          </div> \
+          <div class="yelp-error hidden"> \
+              <p class="yelp-error-emoticon">: (</p> \
+              <p class="yelp-error-message"> \
+                Unable to retrieve Yelp data. Please try again later. \
+              </p> \
           </div> \
         </div> \
         <div class="iw-bottom-gradient"> \
         </div> \
       </div>';
 
-    return html
-      .replace('{self.yelpID}', self.yelpID)
-      .replace('{self.name}', self.name);
+    return html.replace('{yelpID}', self.yelpID).replace('{name}', self.name);
   };
 
   // Make an ajax request to the yelp business api about this Place
-  self.requestYelpData = function() {
-
-    var parameters = {
-          oauth_consumer_key: YELP_CONSUMER_KEY,
-          oauth_token: YELP_TOKEN,
-          oauth_nonce: (Math.floor(Math.random() * 1e12).toString()),
-          oauth_signature_method: 'HMAC-SHA1',
-          oauth_timestamp: Math.floor(Date.now()/1000),
-          callback: 'cb'
-        };
-
-    var url = YELP_URL + self.yelpID;
-    var signature = oauthSignature.generate('GET', url, parameters,
-        YELP_CONSUMER_SECRET, YELP_TOKEN_SECRET);
-
-    parameters.oauth_signature = signature;
-
-    var settings = {
-      url: url,
-      data: parameters,
-      cache: true,
-      dataType: 'jsonp',
-      jsonpCallback: 'cb',
-      success: function(yelpData) {
-        self.yelpDataReceived = true;
-        self.fillYelpInfoDiv(yelpData);
-      },
-      error: function(error) {
-        console.log('Yelp Business API ajax request error:', error);
-        self.fillYelpInfoDivErr(error);
-      }
-    };
-
-    $.ajax(settings);
-  };
-
   // Fill in the yelp-info div of the this Place's info window with data
   // returned from a yelp business api request.
   self.fillYelpInfoDiv = function(yelpData) {
@@ -205,7 +194,29 @@ var Place = function(placeData, map) {
         $yelpInfoDiv.removeClass('hidden');
       });
     });
+  };
 
+  self.fadeInYelpInfoDiv = function(yelpData) {
+    // Select this Place's yelp-info div in the DOM
+    var $yelpInfoDiv = $('#iw-' + self.yelpID + ' .yelp-info');
+
+    // Once the main yelp image has loaded, fade in the yelp-info div
+    //$yelpInfoDiv.find('.yelp-img').on('load', function() {
+      self.fadeOutSpinner(300);
+      $yelpInfoDiv.delay(400).fadeIn('slow', function() {
+        $yelpInfoDiv.removeClass('hidden');
+      });
+    //});
+  };
+
+  self.fadeInYelpErrorDiv = function(yelpData) {
+    // Select this Place's yelp-info div in the DOM
+    var $yelpErrorDiv = $('#iw-' + self.yelpID + ' .yelp-error');
+
+    self.fadeOutSpinner(300);
+    $yelpErrorDiv.delay(400).fadeIn('slow', function() {
+      $yelpErrorDiv.removeClass('hidden');
+    });
   };
 
   // Fill in the yelp-info div of the this Place's info window with an error
@@ -226,6 +237,20 @@ var Place = function(placeData, map) {
     $yelpInfoDiv.append(html);
     self.fadeOutSpinner(300);
     $yelpInfoDiv.delay(400).fadeIn('slow', function() {$yelpInfoDiv.removeClass('hidden'); });
+  };
+
+  self.storeYelpData = function(yelpData) {
+    // Remove country code from phone number
+    var phoneNumber = yelpData.display_phone.substring(3);
+
+    self.yelpData = {
+      snippet: yelpData.snippet_text,
+      imageUrl: yelpData.image_url,
+      ratingImgUrl: yelpData.rating_img_url,
+      reviewCount: yelpData.review_count + ' Reviews',
+      displayPhone: phoneNumber,
+      yelpUrl: USER_ON_MOBILE ? yelpData.mobile_url : yelpData.url
+    };
   };
 
   // Given a JSON object of data returned from a yelp business API request,
@@ -279,7 +304,7 @@ var Place = function(placeData, map) {
 
   // Fade out the spinner that is inside this Place's InfoWindow
   self.fadeOutSpinner = function(speed) {
-    var $spinnerDiv = $('.iw-' + self.yelpID + ' .sk-fading-circle');
+    var $spinnerDiv = $('#iw-' + self.yelpID + ' .sk-fading-circle');
     $spinnerDiv.fadeOut(speed, function() {
       $spinnerDiv.addClass('hidden');
     });
@@ -368,6 +393,7 @@ function AppViewModel() {
         map: self.map,
         infowindow: new google.maps.InfoWindow({
           content: place.makeInfoWindowHTML(),
+          //content: IW_CONTENT_SIMPLE,
           // Adjust the offset so that the info window tail touches the center of marker
           pixelOffset: new google.maps.Size(-1, 20)
         })
@@ -388,9 +414,16 @@ function AppViewModel() {
         }
       });
 
+
       // Change the default appearance of info windows. Code inspired by:
       // http://en.marnoto.com/2014/09/5-formas-de-personalizar-infowindow.html
       place.marker.infowindow.addListener('domready', function() {
+
+        // If the yelp data for this info window hasn't been received,
+        // applyBindings?
+        if (!place.yelpDataReceived) {
+          ko.applyBindings(app.vm, document.getElementById('iw-' + place.yelpID));
+        }
 
         // Hide certain ugly divs are that generated by the google maps API
         var iwOuter = $('.gm-style-iw');
@@ -535,7 +568,7 @@ function AppViewModel() {
     }
 
     // If the yelp data for this Place hasn't been retrieved, request it
-    if (!place.yelpDataReceived) { place.requestYelpData(); }
+    if (!place.yelpDataReceived) { self.requestYelpData(place); }
 
     // If another Place is currently selected, deselect it
     if (self.selectedPlace()) { self.deselectPlace(); }
@@ -554,6 +587,45 @@ function AppViewModel() {
     }
     self.selectedPlace(null);
   };
+
+  self.requestYelpData = function(place) {
+
+    var parameters = {
+          oauth_consumer_key: YELP_CONSUMER_KEY,
+          oauth_token: YELP_TOKEN,
+          oauth_nonce: (Math.floor(Math.random() * 1e12).toString()),
+          oauth_signature_method: 'HMAC-SHA1',
+          oauth_timestamp: Math.floor(Date.now()/1000),
+          callback: 'cb'
+        };
+
+    var url = YELP_URL + place.yelpID;
+    var signature = oauthSignature.generate('GET', url, parameters,
+        YELP_CONSUMER_SECRET, YELP_TOKEN_SECRET);
+
+    parameters.oauth_signature = signature;
+
+    var settings = {
+      url: url,
+      data: parameters,
+      cache: true,
+      dataType: 'jsonp',
+      jsonpCallback: 'cb',
+      success: function(yelpData) {
+        place.yelpDataReceived = true;
+        place.storeYelpData(yelpData);
+        self.selectedPlace(place);
+        place.fadeInYelpInfoDiv();
+      },
+      error: function(error) {
+        console.log('Yelp Business API ajax request error:', error);
+        place.fadeInYelpErrorDiv();
+      }
+    };
+
+    $.ajax(settings);
+  };
+
 }
 
 
