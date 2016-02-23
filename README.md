@@ -14,8 +14,8 @@ is saved in the dist/ directory.
 ## Setup
 
 To install this project on your local machine, clone this repo and cd into its
-root directory.  Then Run `npm install` to download the project dependencies.
-Once the dependencies have been installed, simply open the dist/index.html file
+root directory.  Then run `npm install` to download the project dependencies.
+Once the dependencies have been installed, open the dist/index.html file
 in your favorite web browser.
 
 All source code for this project is located in the src/ directory.  This
