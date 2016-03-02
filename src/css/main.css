@@ -55,9 +55,16 @@ p {
     box-shadow: 3px 3px 3px #888;
     border-radius: 5px;
     outline: none;
-    opacity: 0.75;
+    opacity: 0;
     cursor: pointer;
     cursor: hand;
+    transition: opacity 1s;
+    -webkit-transition: opacity 1s linear 0.5s;
+    -moz-transition: opacity 1s linear 0.5s;
+}
+
+.hamburger-btn.fade-in {
+    opacity: 0.75;
 }
 
 .hamburger-btn img {
