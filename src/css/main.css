@@ -58,13 +58,15 @@ p {
     opacity: 0;
     cursor: pointer;
     cursor: hand;
-    transition: opacity 1s;
-    -webkit-transition: opacity 1s linear 0.5s;
-    -moz-transition: opacity 1s linear 0.5s;
+    pointer-events: none;
+    transition: opacity 0.5s linear 0.5s;
+    -webkit-transition: opacity 0.5s linear 0.5s;
+    -moz-transition: opacity 0.5s linear 0.5s;
 }
 
 .hamburger-btn.fade-in {
     opacity: 0.75;
+    pointer-events: auto;
 }
 
 .hamburger-btn img {
