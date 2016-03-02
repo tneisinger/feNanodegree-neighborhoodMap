@@ -42,6 +42,16 @@ p {
     font-size: 1.5em;
     text-align: center;
     color: red;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s linear;
+    -webkit-transition: opacity 1s linear;
+    -moz-transition: opacity 1s linear;
+}
+
+.map-error-div.fade-in {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* =============== Hamburger Button =============== */

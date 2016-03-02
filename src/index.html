@@ -13,7 +13,8 @@
 <body>
 
     <!-- Hamburger Button -->
-    <div class="hamburger-btn" data-bind="click: openSearchMenu, css: {'fade-in': hamburgerBtnVisible}">
+    <div class="hamburger-btn" data-bind="click: function() {
+      isSearchMenuOpen(true); }, css: {'fade-in': hamburgerBtnVisible}">
         <img src="img/hamburger-icon.svg" alt="menu">
     </div>
 
@@ -45,7 +46,7 @@
     <div id="map" class="map"></div>
 
     <!-- Map Error Message -->
-    <div id="map-error-div" class="map-error-div hidden">
+    <div id="map-error-div" class="map-error-div" data-bind="css: {'fade-in': mapErrMsgVisible}">
       <h2>Uh-oh...</h2>
       <p>Unable to load the map.  Please try again later.</p>
     </div>
@@ -55,7 +56,9 @@
     <script src="../node_modules/oauth-signature/dist/oauth-signature.js"></script>
     <script src="../node_modules/knockout/build/output/knockout-latest.js"></script>
     <script src="js/app.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxa0WW4eWUbfRUm2lB-Lzh-GP6LYibtpI&callback=app.vm.initMap" onerror="app.vm.mapError()">
+    <script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxa0WW4eWUbfRUm2lB-Lzh-GP6LYibtpI&callback=app.vm.initMap"
+onerror="app.vm.mapErrMsgVisible(true)">
     </script>
 </body>
 

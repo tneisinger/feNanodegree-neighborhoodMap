@@ -250,6 +250,11 @@ function AppViewModel() {
   // transitions.
   self.hamburgerBtnVisible = ko.observable(false);
 
+  // An observable that determines if the google maps error message is visible
+  // or not.  When this observable gets set tot true, the error message will
+  // fade in using css transitions.
+  self.mapErrMsgVisible = ko.observable(false);
+
   // An observable that determines whether the search menu is open or not.
   // This observable has no effect when the app is running on a device with
   // a screen wider than 1000px, because in that case, the search menu is
@@ -447,18 +452,6 @@ function AppViewModel() {
         self.closeSearchMenu();
       }
     });
-  };
-
-  self.mapError = function() {
-    var $mapErrorDiv = $('#map-error-div');
-    $mapErrorDiv.fadeIn(function() {
-      $mapErrorDiv.removeClass('hidden');
-    });
-    console.log('An error occured while trying to load the Google Maps API');
-  };
-
-  self.openSearchMenu = function() {
-    self.isSearchMenuOpen(true);
   };
 
   self.closeSearchMenu = function() {
