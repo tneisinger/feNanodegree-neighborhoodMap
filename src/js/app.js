@@ -264,6 +264,8 @@ function AppViewModel() {
   // searchSring is the value inside the input element at the top of the search-menu
   self.searchString = ko.observable('');
 
+  self.searchInputHasFocus = ko.observable(false);
+
   // selectedPlace is the Place Object that has been selected by the user.  The
   // selectedPlace will have its InfoWindow open above its marker.
   self.selectedPlace = ko.observable(null);
@@ -459,7 +461,7 @@ function AppViewModel() {
     // For mobile, you must remove focus from the input element when closing the
     // search menu.  If not, the keyboard on mobile devices will constantly pop
     // up whenever the user interacts with the map.
-    $('.search-menu input').blur();
+    self.searchInputHasFocus(false);
   };
 
   // When the user changes the searchString, map over allPlaces.  If the new
