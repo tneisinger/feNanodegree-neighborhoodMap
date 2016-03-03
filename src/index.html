@@ -57,8 +57,12 @@
           <h2 class="iw-title">{name}</h2>
         </div>
         <div class="iw-content">
+          <!-- For some reason, using a 'with: selectedPlace' binding on the
+               '.sk-fading-circle' div disrupts the fade out of the spinner. 
+               So I use the 'with: selectedPlace' binding further down.  -->
           <div class="sk-fading-circle"
-            data-bind="css: { 'fade-out': selectedPlace().ajaxResponseReceived }">
+            data-bind="fadeOutSpinner: selectedPlace().yelpDataReceived ||
+            selectedPlace().ajaxErrorOccurred">
             <div class="sk-circle1 sk-circle"></div>
             <div class="sk-circle2 sk-circle"></div>
             <div class="sk-circle3 sk-circle"></div>
@@ -73,7 +77,7 @@
             <div class="sk-circle12 sk-circle"></div>
           </div>
           <!-- ko with: selectedPlace -->
-          <div class="yelp-info" data-bind="if: yelpDataReceived, fadeVisible: yelpDataReceived">
+          <div class="yelp-info" data-bind="if: yelpDataReceived, fadeInVisible: yelpDataReceived">
             <div class="snippet-and-img-div">
               <div class="yelp-snippet-div">
                 <p class="yelp-snippet" data-bind="text: yelpData.snippet"></p>
@@ -98,15 +102,13 @@
               </tbody>
             </table>
           </div>
-          <!-- /ko -->
-          <div class="yelp-error" data-bind="css: { 'fade-in':
-            selectedPlace().ajaxResponseReceived &&
-            !selectedPlace().yelpDataReceived }">
-              <p class="yelp-error-emoticon">: (</p>
-              <p class="yelp-error-message">
-                Unable to retrieve Yelp data. Please try again later.
-              </p>
+          <div class="yelp-error" data-bind="fadeInVisible: ajaxErrorOccurred">
+            <p class="yelp-error-emoticon">: (</p>
+            <p class="yelp-error-message">
+              Unable to retrieve Yelp data. Please try again later.
+            </p>
           </div>
+          <!-- /ko -->
         </div>
         <div class="iw-bottom-gradient">
         </div>

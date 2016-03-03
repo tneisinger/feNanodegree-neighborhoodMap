@@ -104,7 +104,7 @@ var Place = function(placeData, map) {
   self.location = placeData.location;
   self.address = placeData.address;
   self.yelpDataReceived = false;
-  self.ajaxResponseReceived = false;
+  self.ajaxErrorOccurred = false;
 
   /* METHODS */
 
@@ -115,7 +115,6 @@ var Place = function(placeData, map) {
 
   // Make and return the initial html for the info window
   self.makeInfoWindowHTML = function() {
-
     // Get the html template for the info windows from index.html
     var html = $('#iw-content-template').html();
 
@@ -123,28 +122,6 @@ var Place = function(placeData, map) {
     return html
       .replace('{yelpID}', self.yelpID)
       .replace('{name}', self.name);
-  };
-
-  self.fadeInYelpInfoDiv = function(yelpData) {
-    // Select this Place's yelp-info div in the DOM
-    var $yelpInfoDiv = $('#iw-' + self.yelpID + ' .yelp-info');
-
-    // Fade out the spinner and fade in the .yelp-info div
-    //self.fadeOutSpinner(300);
-    $yelpInfoDiv.delay(400).fadeIn('slow', function() {
-      $yelpInfoDiv.removeClass('hidden');
-    });
-  };
-
-  self.fadeInYelpErrorDiv = function(yelpData) {
-    // Select this Place's yelp-error div in the DOM
-    var $yelpErrorDiv = $('#iw-' + self.yelpID + ' .yelp-error');
-
-    // Fade out the spinner and fade in the .yelp-error div
-    self.fadeOutSpinner(300);
-    $yelpErrorDiv.delay(400).fadeIn('slow', function() {
-      $yelpErrorDiv.removeClass('hidden');
-    });
   };
 
   // Given a yelpData object returned from the yelp Business API,
@@ -163,14 +140,6 @@ var Place = function(placeData, map) {
       displayPhone: phoneNumber,
       yelpUrl: USER_ON_MOBILE ? yelpData.mobile_url : yelpData.url
     };
-  };
-
-  // Fade out the spinner that is inside this Place's InfoWindow
-  self.fadeOutSpinner = function(speed) {
-    //var $spinnerDiv = $('#iw-' + self.yelpID + ' .sk-fading-circle');
-    //$spinnerDiv.fadeOut(speed, function() {
-      //$spinnerDiv.addClass('hidden');
-    //});
   };
 
   // Animate this Place's map marker to bounce one time.
@@ -498,17 +467,14 @@ function AppViewModel() {
       dataType: 'jsonp',
       jsonpCallback: 'cb',
       success: function(yelpData) {
-        place.ajaxResponseReceived = true;
         place.yelpDataReceived = true;
         place.storeYelpData(yelpData);
         self.selectedPlace(place);
-        //place.fadeInYelpInfoDiv();
       },
       error: function(error) {
-        place.ajaxResponseReceived = true;
+        place.ajaxErrorOccurred = true;
         console.log('Yelp Business API ajax request error:', error);
         self.selectedPlace(place);
-        //place.fadeInYelpErrorDiv();
       }
     };
 
@@ -517,24 +483,53 @@ function AppViewModel() {
 
 }
 
+ko.bindingHandlers.fadeOutSpinner = {
+  init: function(element, valueAccessor) {
+    var value = ko.unwrap(valueAccessor());
+    var $element = $(element);
+    if (value) {
+      $element.addClass('fade-out');
+      setTimeout(function() {
+        $element.hide();
+      }, 550);
+    }
+  },
+  update: function(element, valueAccessor) {
+    var value = ko.unwrap(valueAccessor());
+    var $element = $(element);
+    if (value) {
+      $element.addClass('fade-out');
+      setTimeout(function() {
+        $element.hide();
+      }, 550);
+    }
+  }
+};
+
 // Here's a custom Knockout binding that makes elements shown/hidden via jQuery's fadeIn()/fadeOut() methods
 // Could be stored in a separate utility library
-ko.bindingHandlers.fadeVisible = {
+ko.bindingHandlers.fadeInVisible = {
     init: function(element, valueAccessor) {
-        // Initially set the element to be instantly visible/hidden depending on the value
-        var value = valueAccessor();
-        $(element).toggle(ko.unwrap(value)); // Use "unwrapObservable" so we can handle values that may or may not be observable
+      // Initially set the element to be instantly visible/hidden depending on the value
+      var value = ko.unwrap(valueAccessor());
+      var $element = $(element);
+      if (value) {
+        $(element).show();
+        setTimeout(function() {
+          $element.addClass('fade-in');
+        }, 100);
+      }
     },
     update: function(element, valueAccessor) {
-        // Whenever the value subsequently changes, slowly fade the element in or out
-        var value = valueAccessor();
-        $(element).toggle(ko.unwrap(value));
-        // Because we are toggling the display of the element, we have to delay
-        // the fade to keep the display change from cancelling the fade.
-        // With this setTimeout, there will be no fade.
+      // Initially set the element to be instantly visible/hidden depending on the value
+      var value = ko.unwrap(valueAccessor());
+      var $element = $(element);
+      if (value) {
+        $(element).show();
         setTimeout(function() {
-          ko.unwrap(value) ? $(element).addClass('fade-in') : $(element).removeClass('fade-in');
-        }, 10);
+          $element.addClass('fade-in');
+        }, 100);
+      }
     }
 };
 
