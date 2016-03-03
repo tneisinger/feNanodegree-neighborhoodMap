@@ -23,7 +23,7 @@ module.exports = function(grunt) {
     htmlmin: {
       dist: {
         options: {
-          removeComments: true,
+          removeComments: false,
           collapseWhitespace: true
         },
         files: [{
