@@ -14,7 +14,7 @@
 
     <!-- Hamburger Button -->
     <div class="hamburger-btn" data-bind="click: function() {
-      isSearchMenuOpen(true); }, css: {'fade-in': hamburgerBtnVisible}">
+      isSearchMenuOpen(true); }, showAndFadeIn: hamburgerBtnVisible">
         <img src="img/hamburger-icon.svg" alt="menu">
     </div>
 
@@ -61,7 +61,7 @@
                '.sk-fading-circle' div disrupts the fade out of the spinner. 
                So I use the 'with: selectedPlace' binding further down.  -->
           <div class="sk-fading-circle"
-            data-bind="fadeOutSpinner: selectedPlace().yelpDataReceived ||
+            data-bind="fadeOutAndHide: selectedPlace().yelpDataReceived ||
             selectedPlace().ajaxErrorOccurred">
             <div class="sk-circle1 sk-circle"></div>
             <div class="sk-circle2 sk-circle"></div>
@@ -77,7 +77,7 @@
             <div class="sk-circle12 sk-circle"></div>
           </div>
           <!-- ko with: selectedPlace -->
-          <div class="yelp-info" data-bind="if: yelpDataReceived, fadeInVisible: yelpDataReceived">
+          <div class="yelp-info" data-bind="if: yelpDataReceived, showAndFadeIn: yelpDataReceived">
             <div class="snippet-and-img-div">
               <div class="yelp-snippet-div">
                 <p class="yelp-snippet" data-bind="text: yelpData.snippet"></p>
@@ -102,7 +102,7 @@
               </tbody>
             </table>
           </div>
-          <div class="yelp-error" data-bind="fadeInVisible: ajaxErrorOccurred">
+          <div class="yelp-error" data-bind="showAndFadeIn: ajaxErrorOccurred">
             <p class="yelp-error-emoticon">: (</p>
             <p class="yelp-error-message">
               Unable to retrieve Yelp data. Please try again later.

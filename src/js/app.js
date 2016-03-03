@@ -256,6 +256,11 @@ function AppViewModel() {
       // When closing an info window, deselect the corresponding Place and
       // if no yelpData was received, reset the info window content.
       place.marker.infowindow.addListener('closeclick', function() {
+
+        // Whenever the info window is closed, reset the ajaxErrorOccurred
+        // attribute to false.
+        place.ajaxErrorOccurred = false;
+
         self.deselectPlace();
         // If a yelp ajax request fails, an error message will appear in the
         // selected Place's info window.  That error message will remain in the
@@ -266,6 +271,9 @@ function AppViewModel() {
         if (!place.yelpDataReceived) {
           place.marker.infowindow.setContent(place.makeInfoWindowHTML());
         }
+
+        // Reset the ajaxErrorOccurred attribute to false each time an info
+        // window closes.
       });
 
       // Change the default appearance of info windows. Code inspired by:
@@ -483,52 +491,41 @@ function AppViewModel() {
 
 }
 
-ko.bindingHandlers.fadeOutSpinner = {
-  init: function(element, valueAccessor) {
-    var value = ko.unwrap(valueAccessor());
-    var $element = $(element);
-    if (value) {
-      $element.addClass('fade-out');
-      setTimeout(function() {
-        $element.hide();
-      }, 550);
-    }
-  },
+ko.bindingHandlers.fadeOutAndHide = {
   update: function(element, valueAccessor) {
-    var value = ko.unwrap(valueAccessor());
+
     var $element = $(element);
-    if (value) {
+
+    // If the value accessor is true, the element should be faded out
+    var shouldFadeOut = ko.unwrap(valueAccessor());
+
+    // Get the length of the css transition in milliseconds
+    var fadeLengthSeconds = parseFloat($element.css('transition-duration').slice(0,-1));
+    var fadeLengthMS = Math.round(fadeLengthSeconds * 1000);
+
+    // If we should, fade out the element and then hide it after the fade has
+    // completed.
+    if (shouldFadeOut) {
       $element.addClass('fade-out');
       setTimeout(function() {
         $element.hide();
-      }, 550);
+      }, fadeLengthMS + 50);
     }
   }
 };
 
-// Here's a custom Knockout binding that makes elements shown/hidden via jQuery's fadeIn()/fadeOut() methods
-// Could be stored in a separate utility library
-ko.bindingHandlers.fadeInVisible = {
-    init: function(element, valueAccessor) {
-      // Initially set the element to be instantly visible/hidden depending on the value
-      var value = ko.unwrap(valueAccessor());
-      var $element = $(element);
-      if (value) {
-        $(element).show();
-        setTimeout(function() {
-          $element.addClass('fade-in');
-        }, 100);
-      }
-    },
+ko.bindingHandlers.showAndFadeIn = {
     update: function(element, valueAccessor) {
-      // Initially set the element to be instantly visible/hidden depending on the value
-      var value = ko.unwrap(valueAccessor());
       var $element = $(element);
-      if (value) {
-        $(element).show();
+      var shouldFadeIn = ko.unwrap(valueAccessor());
+      if (shouldFadeIn) {
+        $element.show();
         setTimeout(function() {
           $element.addClass('fade-in');
         }, 100);
+      } else {
+        $element.hide();
+        $element.removeClass('fade-in');
       }
     }
 };
