@@ -51,6 +51,68 @@
       <p>Unable to load the map.  Please try again later.</p>
     </div>
 
+    <template id="iw-content-template">
+      <div id="iw-{yelpID}" class="iw-container">
+        <div class="iw-header">
+          <h2 class="iw-title">{name}</h2>
+        </div>
+        <div class="iw-content">
+          <div class="sk-fading-circle"
+            data-bind="css: { 'fade-out': selectedPlace().ajaxResponseReceived }">
+            <div class="sk-circle1 sk-circle"></div>
+            <div class="sk-circle2 sk-circle"></div>
+            <div class="sk-circle3 sk-circle"></div>
+            <div class="sk-circle4 sk-circle"></div>
+            <div class="sk-circle5 sk-circle"></div>
+            <div class="sk-circle6 sk-circle"></div>
+            <div class="sk-circle7 sk-circle"></div>
+            <div class="sk-circle8 sk-circle"></div>
+            <div class="sk-circle9 sk-circle"></div>
+            <div class="sk-circle10 sk-circle"></div>
+            <div class="sk-circle11 sk-circle"></div>
+            <div class="sk-circle12 sk-circle"></div>
+          </div>
+          <!-- ko with: selectedPlace -->
+          <div class="yelp-info" data-bind="if: yelpDataReceived, fadeVisible: yelpDataReceived">
+            <div class="snippet-and-img-div">
+              <div class="yelp-snippet-div">
+                <p class="yelp-snippet" data-bind="text: yelpData.snippet"></p>
+              </div>
+              <div class="yelp-img-div">
+                <img class="yelp-img" data-bind="attr: { src: yelpData.imageUrl }">
+              </div>
+            </div>
+            <table>
+              <tbody>
+                <tr>
+                  <td>
+                    <img class="yelp-rating-img" data-bind="attr: { src: yelpData.ratingImgUrl }">
+                  </td>
+                  <td class="review-count" data-bind="text: yelpData.reviewCount"></td>
+                </tr>
+                <tr>
+                  <td data-bind="text: yelpData.displayPhone"></td>
+                  <td>
+                    <a data-bind="attr: { href: yelpData.yelpUrl }">View on Yelp</a>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- /ko -->
+          <div class="yelp-error" data-bind="css: { 'fade-in':
+            selectedPlace().ajaxResponseReceived &&
+            !selectedPlace().yelpDataReceived }">
+              <p class="yelp-error-emoticon">: (</p>
+              <p class="yelp-error-message">
+                Unable to retrieve Yelp data. Please try again later.
+              </p>
+          </div>
+        </div>
+        <div class="iw-bottom-gradient">
+        </div>
+      </div>
+    </template>
+
     <!--Javascript files-->
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/oauth-signature/dist/oauth-signature.js"></script>

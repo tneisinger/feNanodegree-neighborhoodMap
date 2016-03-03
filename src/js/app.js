@@ -104,6 +104,7 @@ var Place = function(placeData, map) {
   self.location = placeData.location;
   self.address = placeData.address;
   self.yelpDataReceived = false;
+  self.ajaxResponseReceived = false;
 
   /* METHODS */
 
@@ -115,62 +116,8 @@ var Place = function(placeData, map) {
   // Make and return the initial html for the info window
   self.makeInfoWindowHTML = function() {
 
-    // Define the html that will go in the info windows.
-    var html = ' \
-      <div id="iw-{yelpID}" class="iw-container" data-bind="with: selectedPlace"> \
-        <div class="iw-header"> \
-          <h2 class="iw-title">{name}</h2> \
-        </div> \
-        <div class="iw-content"> \
-          <div class="sk-fading-circle"> \
-            <div class="sk-circle1 sk-circle"></div> \
-            <div class="sk-circle2 sk-circle"></div> \
-            <div class="sk-circle3 sk-circle"></div> \
-            <div class="sk-circle4 sk-circle"></div> \
-            <div class="sk-circle5 sk-circle"></div> \
-            <div class="sk-circle6 sk-circle"></div> \
-            <div class="sk-circle7 sk-circle"></div> \
-            <div class="sk-circle8 sk-circle"></div> \
-            <div class="sk-circle9 sk-circle"></div> \
-            <div class="sk-circle10 sk-circle"></div> \
-            <div class="sk-circle11 sk-circle"></div> \
-            <div class="sk-circle12 sk-circle"></div> \
-          </div> \
-          <div class="yelp-info hidden" data-bind="if: yelpDataReceived"> \
-            <div class="snippet-and-img-div">\
-              <div class="yelp-snippet-div">\
-                <p class="yelp-snippet" data-bind="text: yelpData.snippet"></p>\
-              </div>\
-              <div class="yelp-img-div">\
-                <img class="yelp-img" data-bind="attr: { src: yelpData.imageUrl }">\
-              </div>\
-            </div>\
-            <table>\
-              <tbody>\
-                <tr>\
-                  <td>\
-                    <img class="yelp-rating-img" data-bind="attr: { src: yelpData.ratingImgUrl }">\
-                  </td>\
-                  <td class="review-count" data-bind="text: yelpData.reviewCount"></td>\
-                </tr>\
-                <tr>\
-                  <td data-bind="text: yelpData.displayPhone"></td>\
-                  <td>\
-                    <a data-bind="attr: { href: yelpData.yelpUrl }">View on Yelp</a>\
-                </tr>\
-              </tbody>\
-            </table>\
-          </div> \
-          <div class="yelp-error hidden"> \
-              <p class="yelp-error-emoticon">: (</p> \
-              <p class="yelp-error-message"> \
-                Unable to retrieve Yelp data. Please try again later. \
-              </p> \
-          </div> \
-        </div> \
-        <div class="iw-bottom-gradient"> \
-        </div> \
-      </div>';
+    // Get the html template for the info windows from index.html
+    var html = $('#iw-content-template').html();
 
     // Replace '{yelpID}' and '{name}' with the yelpID and name of this Place
     return html
@@ -183,7 +130,7 @@ var Place = function(placeData, map) {
     var $yelpInfoDiv = $('#iw-' + self.yelpID + ' .yelp-info');
 
     // Fade out the spinner and fade in the .yelp-info div
-    self.fadeOutSpinner(300);
+    //self.fadeOutSpinner(300);
     $yelpInfoDiv.delay(400).fadeIn('slow', function() {
       $yelpInfoDiv.removeClass('hidden');
     });
@@ -220,10 +167,10 @@ var Place = function(placeData, map) {
 
   // Fade out the spinner that is inside this Place's InfoWindow
   self.fadeOutSpinner = function(speed) {
-    var $spinnerDiv = $('#iw-' + self.yelpID + ' .sk-fading-circle');
-    $spinnerDiv.fadeOut(speed, function() {
-      $spinnerDiv.addClass('hidden');
-    });
+    //var $spinnerDiv = $('#iw-' + self.yelpID + ' .sk-fading-circle');
+    //$spinnerDiv.fadeOut(speed, function() {
+      //$spinnerDiv.addClass('hidden');
+    //});
   };
 
   // Animate this Place's map marker to bounce one time.
@@ -267,7 +214,8 @@ function AppViewModel() {
   self.searchInputHasFocus = ko.observable(false);
 
   // selectedPlace is the Place Object that has been selected by the user.  The
-  // selectedPlace will have its InfoWindow open above its marker.
+  // selectedPlace will have an open InfoWindow and be highlighted in the
+  // search menu.
   self.selectedPlace = ko.observable(null);
 
   // Convert each object in placesData to a Place object and store all of them
@@ -550,14 +498,17 @@ function AppViewModel() {
       dataType: 'jsonp',
       jsonpCallback: 'cb',
       success: function(yelpData) {
+        place.ajaxResponseReceived = true;
         place.yelpDataReceived = true;
         place.storeYelpData(yelpData);
         self.selectedPlace(place);
-        place.fadeInYelpInfoDiv();
+        //place.fadeInYelpInfoDiv();
       },
       error: function(error) {
+        place.ajaxResponseReceived = true;
         console.log('Yelp Business API ajax request error:', error);
-        place.fadeInYelpErrorDiv();
+        self.selectedPlace(place);
+        //place.fadeInYelpErrorDiv();
       }
     };
 
@@ -566,6 +517,26 @@ function AppViewModel() {
 
 }
 
+// Here's a custom Knockout binding that makes elements shown/hidden via jQuery's fadeIn()/fadeOut() methods
+// Could be stored in a separate utility library
+ko.bindingHandlers.fadeVisible = {
+    init: function(element, valueAccessor) {
+        // Initially set the element to be instantly visible/hidden depending on the value
+        var value = valueAccessor();
+        $(element).toggle(ko.unwrap(value)); // Use "unwrapObservable" so we can handle values that may or may not be observable
+    },
+    update: function(element, valueAccessor) {
+        // Whenever the value subsequently changes, slowly fade the element in or out
+        var value = valueAccessor();
+        $(element).toggle(ko.unwrap(value));
+        // Because we are toggling the display of the element, we have to delay
+        // the fade to keep the display change from cancelling the fade.
+        // With this setTimeout, there will be no fade.
+        setTimeout(function() {
+          ko.unwrap(value) ? $(element).addClass('fade-in') : $(element).removeClass('fade-in');
+        }, 10);
+    }
+};
 
 // Start the app
 var app = { vm: new AppViewModel() };
